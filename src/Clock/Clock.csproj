@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>EMG.Utilities.Clock</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>EMG.Utilities.Clock</PackageId>
+    <PackageTags>dotnet-standard</PackageTags>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Clock\Clock.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>EMG.Utilities.Clock.Testing</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>EMG.Utilities.Clock.Testing</PackageId>
+    <PackageTags>dotnet-standard;unit-test</PackageTags>
+  </PropertyGroup>
+
+
+</Project>
