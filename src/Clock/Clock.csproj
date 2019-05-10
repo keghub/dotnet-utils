@@ -8,6 +8,7 @@
   <PropertyGroup>
     <PackageId>EMG.Utilities.Clock</PackageId>
     <PackageTags>dotnet-standard</PackageTags>
+    <Description>Helper class to avoid accessing statically the current date and time.</Description>
   </PropertyGroup>
 
 </Project>

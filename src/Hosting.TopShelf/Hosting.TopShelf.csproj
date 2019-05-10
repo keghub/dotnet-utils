@@ -8,6 +8,7 @@
   <PropertyGroup>
     <PackageId>EMG.Utilities.Hosting.TopShelf</PackageId>
     <PackageTags>dotnet-standard;topshelf</PackageTags>
+    <Description>Helper classes to create Windows Services based on TopShelf that host services built on IHostedService</Description>
   </PropertyGroup>
 
   <ItemGroup>
