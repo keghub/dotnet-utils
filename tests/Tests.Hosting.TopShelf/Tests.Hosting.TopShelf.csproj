@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Hosting.TopShelf\Hosting.TopShelf.csproj" />
+    <ProjectReference Include="..\..\src\Hosting\Hosting.TopShelf\Hosting.TopShelf.csproj" />
   </ItemGroup>
 
 </Project>

@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Clock.Testing\Clock.Testing.csproj" />
+    <ProjectReference Include="..\..\src\Testing\Clock.Testing\Clock.Testing.csproj" />
     <ProjectReference Include="..\..\src\Clock\Clock.csproj" />
   </ItemGroup>
 

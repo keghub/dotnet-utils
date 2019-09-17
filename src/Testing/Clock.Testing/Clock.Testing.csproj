@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Clock\Clock.csproj" />
+    <ProjectReference Include="..\..\Clock\Clock.csproj" />
   </ItemGroup>
 
 </Project>
