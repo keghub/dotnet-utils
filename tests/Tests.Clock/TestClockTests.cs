@@ -33,11 +33,11 @@ namespace Tests
         [Test, AutoData]
         public void TestClock_can_be_reset_to_current_time(TestClock sut)
         {
-            Assume.That(sut.UtcNow, Is.Not.EqualTo(DateTimeOffset.UtcNow).Within(TimeSpan.FromMilliseconds(10)));
+            Assume.That(sut.UtcNow, Is.Not.EqualTo(DateTimeOffset.UtcNow).Within(TimeSpan.FromMilliseconds(100)));
 
             sut.ResetToCurrent();
 
-            Assert.That(sut.UtcNow, Is.EqualTo(DateTimeOffset.UtcNow).Within(TimeSpan.FromMilliseconds(10)));
+            Assert.That(sut.UtcNow, Is.EqualTo(DateTimeOffset.UtcNow).Within(TimeSpan.FromMilliseconds(100)));
         }
     }
 }
