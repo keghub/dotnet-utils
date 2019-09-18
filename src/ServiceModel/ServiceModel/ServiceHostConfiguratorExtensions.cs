@@ -3,6 +3,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using EMG.Utilities.ServiceModel.Configuration;
+using EMG.Utilities.ServiceModel.Logging;
 
 namespace EMG.Utilities.ServiceModel
 {
@@ -37,6 +38,11 @@ namespace EMG.Utilities.ServiceModel
 
                 return httpBinding?.Address.Uri.Port;
             }
+        }
+
+        public static void AddExecutionLogging(this IServiceHostConfigurator configurator)
+        {
+            configurator.ServiceHostConfigurations.Add(host => host.Description.Behaviors.Add(new ExecutionLoggingBehavior(configurator.LoggerFactory)));
         }
     }
 

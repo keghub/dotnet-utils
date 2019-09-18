@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using Microsoft.Extensions.Logging;
 
 namespace EMG.Utilities.ServiceModel.Configuration
 {
@@ -12,7 +13,7 @@ namespace EMG.Utilities.ServiceModel.Configuration
 
         IList<Action<ServiceHost>> ServiceHostConfigurations { get; }
 
-        void AddExecutionLogging();
+        ILoggerFactory LoggerFactory { get; }
     }
 
     public interface IServiceHostConfigurator<TService> : IServiceHostConfigurator

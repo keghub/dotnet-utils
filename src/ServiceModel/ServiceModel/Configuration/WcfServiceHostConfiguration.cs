@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using EMG.Utilities.ServiceModel.Logging;
 using Microsoft.Extensions.Logging;
 
 namespace EMG.Utilities.ServiceModel.Configuration
@@ -10,14 +9,13 @@ namespace EMG.Utilities.ServiceModel.Configuration
     public class WcfServiceHostConfiguration<TService> : IServiceHostConfigurator<TService>, IServiceHostConfiguration
         where TService : class
     {
-        private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<WcfServiceHostConfiguration<TService>> _logger;
         private readonly List<IEndpoint> _endpoints = new List<IEndpoint>();
 
         public WcfServiceHostConfiguration(ILoggerFactory loggerFactory)
         {
-            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-            _logger = _loggerFactory.CreateLogger<WcfServiceHostConfiguration<TService>>();
+            LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _logger = LoggerFactory.CreateLogger<WcfServiceHostConfiguration<TService>>();
         }
 
         public void ConfigureServiceHost(ServiceHost serviceHost)
@@ -57,6 +55,11 @@ namespace EMG.Utilities.ServiceModel.Configuration
 
             var binding = new TBinding();
 
+            if (!string.Equals(address.Scheme, binding.Scheme))
+            {
+                throw new ArgumentException($"Binding scheme and address scheme don't match", nameof(address));
+            }
+
             configureBinding?.Invoke(binding);
 
             var endpoint = new WcfEndpoint(contract, address, binding);
@@ -70,13 +73,7 @@ namespace EMG.Utilities.ServiceModel.Configuration
 
         public IList<Action<ServiceHost>> ServiceHostConfigurations { get; } = new List<Action<ServiceHost>>();
 
-        public void AddExecutionLogging()
-        {
-            ServiceHostConfigurations.Add(serviceHost =>
-            {
-                serviceHost.Description.Behaviors.Add(new ExecutionLoggingBehavior(_loggerFactory));
-            });
-        }
+        public ILoggerFactory LoggerFactory { get; }
     }
 
 }
