@@ -9,7 +9,7 @@ namespace EMG.Utilities.ServiceModel
 {
     public static class ServiceHostConfiguratorExtensions
     {
-        public static void EnableDefaultMetadata(this IServiceHostConfigurator configurator, Action<ServiceMetadataBehavior> serviceMetadataBehaviorConfigurator = null)
+        public static void EnableDefaultMetadata(this IServiceHostConfigurator configurator, Action<ServiceMetadataBehavior> serviceMetadataBehaviorConfigurator = null, string endpointAddress = "mex")
         {
             configurator.ServiceHostConfigurations.Add(serviceHost =>
             {
@@ -24,9 +24,21 @@ namespace EMG.Utilities.ServiceModel
 
                 bool hasSupportedEndpoint = false;
                 
+                if (TryFindEndpointByBinding<WSHttpBinding>(serviceHost, out var wsEndpoint))
+                {
+                    var address = new Uri($"{wsEndpoint.Address.Uri}/{endpointAddress}");
+
+                    behavior.HttpGetEnabled = true;
+                    behavior.HttpGetUrl = address;
+                    
+                    serviceHost.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexHttpBinding(), address);
+
+                    hasSupportedEndpoint = true;
+                }
+
                 if (TryFindEndpointByBinding<BasicHttpBinding>(serviceHost, out var httpEndpoint))
                 {
-                    var address = new Uri($"{httpEndpoint.Address.Uri}/mex");
+                    var address = new Uri($"{httpEndpoint.Address.Uri}/{endpointAddress}");
 
                     behavior.HttpGetEnabled = true;
                     behavior.HttpGetUrl = address;
@@ -38,14 +50,14 @@ namespace EMG.Utilities.ServiceModel
 
                 if (TryFindEndpointByBinding<NetNamedPipeBinding>(serviceHost, out var netNamedEndpoint))
                 {
-                    serviceHost.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexNamedPipeBinding(), $"{netNamedEndpoint.Address.Uri}/mex");
+                    serviceHost.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexNamedPipeBinding(), $"{netNamedEndpoint.Address.Uri}/{endpointAddress}");
 
                     hasSupportedEndpoint = true;
                 }
 
                 if (TryFindEndpointByBinding<NetTcpBinding>(serviceHost, out var netTcpEndpoint))
                 {
-                    serviceHost.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexTcpBinding(), $"{netTcpEndpoint.Address.Uri}/mex");
+                    serviceHost.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexTcpBinding(), $"{netTcpEndpoint.Address.Uri}/{endpointAddress}");
 
                     hasSupportedEndpoint = true;
                 }
