@@ -17,7 +17,7 @@ namespace EMG.Utilities.ServiceModel
     {
         public static IServiceCollection AddWcfService<TService>(this IServiceCollection services, WcfServiceConfigurator<TService> configurator, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton) where TService : class
         {
-            services.AddSingleton(sp =>
+            services.AddSingleton<IServiceHostConfiguration<TService>>(sp =>
             {
                 var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
 

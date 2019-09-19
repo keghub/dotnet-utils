@@ -29,7 +29,7 @@ namespace Tests.ServiceModel
         {
             ServiceCollectionExtensions.AddWcfService<TestService>(services, configurator, lifetime);
 
-            Mock.Get(services).Verify(p => p.Add(It.Is<ServiceDescriptor>(d => d.ServiceType == typeof(WcfServiceHostConfiguration<TestService>) && d.Lifetime == ServiceLifetime.Singleton)));
+            Mock.Get(services).Verify(p => p.Add(It.Is<ServiceDescriptor>(d => d.ServiceType == typeof(IServiceHostConfiguration<TestService>) && d.Lifetime == ServiceLifetime.Singleton)));
         }
 
         [Test, CustomAutoData]

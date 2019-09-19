@@ -16,7 +16,7 @@ namespace Tests.ServiceModel
         {
             Assume.That(configurator.ServiceHostConfigurations, Is.Empty);
 
-            ServiceHostConfiguratorExtensions.EnableMetadata(configurator, port, serviceMetadataBehaviorConfigurator);
+            ServiceHostConfiguratorExtensions.EnableDefaultMetadata(configurator, serviceMetadataBehaviorConfigurator);
 
             Assert.That(configurator.ServiceHostConfigurations, Has.One.InstanceOf<Action<ServiceHost>>());
         }

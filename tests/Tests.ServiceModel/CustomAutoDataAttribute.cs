@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.ServiceModel.Description;
+using System.ServiceModel.Dispatcher;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.NUnit3;

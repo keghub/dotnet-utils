@@ -9,40 +9,65 @@ namespace EMG.Utilities.ServiceModel
 {
     public static class ServiceHostConfiguratorExtensions
     {
-        public static void EnableMetadata(this IServiceHostConfigurator configurator, int? port = null, Action<ServiceMetadataBehavior> serviceMetadataBehaviorConfigurator = null)
+        public static void EnableDefaultMetadata(this IServiceHostConfigurator configurator, Action<ServiceMetadataBehavior> serviceMetadataBehaviorConfigurator = null)
         {
             configurator.ServiceHostConfigurations.Add(serviceHost =>
             {
-                var metadataPort = port ?? GetPortFromExistingBindings(serviceHost, Uri.UriSchemeHttp) ?? throw new ArgumentException("A port number is required if no HTTP endpoint is already defined");
+                var behavior = serviceHost.Description.Behaviors.Find<ServiceMetadataBehavior>();
 
-                var uriBuilder = new UriBuilder(Uri.UriSchemeHttp, "localhost", metadataPort);
-
-                var address = uriBuilder.Uri;
-
-                var behavior = new ServiceMetadataBehavior
+                if (behavior == null)
                 {
-                    HttpGetEnabled = true,
-                    HttpGetUrl = address
-                };
+                    behavior = new ServiceMetadataBehavior();
+
+                    serviceHost.Description.Behaviors.Add(behavior);
+                }
+
+                bool hasSupportedEndpoint = false;
+                
+                if (TryFindEndpointByBinding<BasicHttpBinding>(serviceHost, out var httpEndpoint))
+                {
+                    var address = new Uri($"{httpEndpoint.Address.Uri}/mex");
+
+                    behavior.HttpGetEnabled = true;
+                    behavior.HttpGetUrl = address;
+                    
+                    serviceHost.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, new BasicHttpBinding(), address);
+
+                    hasSupportedEndpoint = true;
+                }
+
+                if (TryFindEndpointByBinding<NetNamedPipeBinding>(serviceHost, out var netNamedEndpoint))
+                {
+                    serviceHost.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexNamedPipeBinding(), $"{netNamedEndpoint.Address.Uri}/mex");
+
+                    hasSupportedEndpoint = true;
+                }
+
+                if (TryFindEndpointByBinding<NetTcpBinding>(serviceHost, out var netTcpEndpoint))
+                {
+                    serviceHost.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexTcpBinding(), $"{netTcpEndpoint.Address.Uri}/mex");
+
+                    hasSupportedEndpoint = true;
+                }
+
+                if (!hasSupportedEndpoint)
+                {
+                    throw new InvalidOperationException("No supported endpoint has been found.");
+                }
 
                 serviceMetadataBehaviorConfigurator?.Invoke(behavior);
-
-                serviceHost.Description.Behaviors.Add(behavior);
-
-                serviceHost.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, new BasicHttpBinding(), address);
             });
-
-            int? GetPortFromExistingBindings(ServiceHost serviceHost, string uriScheme)
-            {
-                var httpBinding = serviceHost.Description.Endpoints.FirstOrDefault(s => s.Address.Uri.Scheme == uriScheme);
-
-                return httpBinding?.Address.Uri.Port;
-            }
         }
 
         public static void AddExecutionLogging(this IServiceHostConfigurator configurator)
         {
             configurator.ServiceHostConfigurations.Add(host => host.Description.Behaviors.Add(new ExecutionLoggingBehavior(configurator.LoggerFactory)));
+        }
+
+        private static bool TryFindEndpointByBinding<TBinding>(ServiceHost host, out ServiceEndpoint endpoint)
+        {
+            endpoint = host.Description.Endpoints.FirstOrDefault(e => e.Binding is TBinding);
+            return endpoint != null;
         }
     }
 
