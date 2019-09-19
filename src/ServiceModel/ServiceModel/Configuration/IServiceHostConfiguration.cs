@@ -9,4 +9,9 @@ namespace EMG.Utilities.ServiceModel.Configuration
 
         Type ServiceType { get; }
     }
+
+    public interface IServiceHostConfiguration<TService> : IServiceHostConfiguration
+    {
+
+    }
 }

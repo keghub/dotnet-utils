@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace EMG.Utilities.ServiceModel.Configuration
 {
-    public class WcfServiceHostConfiguration<TService> : IServiceHostConfigurator<TService>, IServiceHostConfiguration
+    public class WcfServiceHostConfiguration<TService> : IServiceHostConfigurator<TService>, IServiceHostConfiguration<TService>
         where TService : class
     {
         private readonly ILogger<WcfServiceHostConfiguration<TService>> _logger;

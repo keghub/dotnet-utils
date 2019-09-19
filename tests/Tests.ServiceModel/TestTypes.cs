@@ -1,6 +1,8 @@
 using System;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using System.ServiceModel.Description;
+using System.ServiceModel.Dispatcher;
 using System.Threading.Tasks;
 
 namespace Tests
@@ -45,5 +47,28 @@ namespace Tests
         }
 
         public override string Scheme { get; } = "";
+    }
+
+    public class TestEndpointBehavior : IEndpointBehavior
+    {
+        public void Validate(ServiceEndpoint endpoint)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddBindingParameters(ServiceEndpoint endpoint, BindingParameterCollection bindingParameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ApplyDispatchBehavior(ServiceEndpoint endpoint, EndpointDispatcher endpointDispatcher)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ApplyClientBehavior(ServiceEndpoint endpoint, ClientRuntime clientRuntime)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace EMG.Utilities.ServiceModel.Hosting
         private readonly IServiceHostBuilder _serviceHostBuilder;
         private readonly IServiceHostConfiguration _serviceHostConfiguration;
 
-        public WcfServiceHostedServiceConfiguration(IServiceHostBuilder serviceHostBuilder, WcfServiceHostConfiguration<TService> configuration)
+        public WcfServiceHostedServiceConfiguration(IServiceHostBuilder serviceHostBuilder, IServiceHostConfiguration<TService> configuration)
         {
             _serviceHostBuilder = serviceHostBuilder ?? throw new ArgumentNullException(nameof(serviceHostBuilder));
             _serviceHostConfiguration = configuration ?? throw new ArgumentNullException(nameof(configuration));

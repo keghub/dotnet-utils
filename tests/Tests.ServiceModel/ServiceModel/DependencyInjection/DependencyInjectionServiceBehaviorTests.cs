@@ -1,7 +1,11 @@
-﻿using System.ServiceModel;
+﻿using System;
+using System.ServiceModel;
 using System.ServiceModel.Description;
 using AutoFixture.Idioms;
+using AutoFixture.NUnit3;
 using EMG.Utilities.ServiceModel.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Moq;
 using NUnit.Framework;
 
 namespace Tests.ServiceModel.DependencyInjection
@@ -28,6 +32,16 @@ namespace Tests.ServiceModel.DependencyInjection
         public void AddBindingParameters_does_not_throw(DependencyInjectionServiceBehavior sut)
         {
             Assert.DoesNotThrow(() => sut.AddBindingParameters(null, null, null, null));
+        }
+
+        [Test, CustomAutoData]
+        public void ApplyDispatchBehavior([Frozen] IServiceProvider serviceProvider, DependencyInjectionServiceBehavior sut, ServiceHost host, ILogger<DependencyInjectionInstanceProvider> providerLogger, string endpoint)
+        {
+            Mock.Get(serviceProvider).Setup(p => p.GetService(typeof(ILogger<DependencyInjectionInstanceProvider>))).Returns(providerLogger);
+
+            host.AddServiceEndpoint(typeof(ITestService), new NetNamedPipeBinding(), new Uri($"net.pipe://localhost/{endpoint}"));
+
+            sut.ApplyDispatchBehavior(host.Description, host);
         }
     }
 }

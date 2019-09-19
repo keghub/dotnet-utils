@@ -43,7 +43,7 @@ namespace EMG.Utilities.ServiceModel
                 return new WcfServiceHostedService(options, announceService, logger);
             });
 
-            services.TryAddSingleton<IAnnouncementService, AnnouncementService>();
+            services.TryAddSingleton<IAnnouncementService, EmptyAnnouncementService>();
 
             services.Add(new ServiceDescriptor(typeof(TService), typeof(TService), serviceLifetime));
 
@@ -63,6 +63,8 @@ namespace EMG.Utilities.ServiceModel
                 options.Interval = interval;
                 options.Binding = binding;
             });
+
+            services.AddSingleton<IAnnouncementService, AnnouncementService>();
 
             return services;
         }
