@@ -97,6 +97,7 @@ Task("RunTests")
 
                 var dotCoverSettings = new DotCoverCoverSettings()
                                         .WithFilter("+:EMG*")
+                                        .WithFilter("-:Samples*")
                                         .WithFilter("-:Tests*")
                                         .WithFilter("-:TestUtils");
 

@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <RootNamespace>Samples</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>$(RootNamespace).$(MSBuildProjectName)</AssemblyName>
+  </PropertyGroup>
+</Project>
