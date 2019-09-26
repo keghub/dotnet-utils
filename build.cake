@@ -193,7 +193,8 @@ Task("Test")
     .IsDependentOn("MergeCoverageResults")
     .IsDependentOn("GenerateXmlReport")
     .IsDependentOn("ExportReport")
-    .IsDependentOn("UploadTestsToAppVeyor");
+    //.IsDependentOn("UploadTestsToAppVeyor")
+    ;
 
 Task("PackLibraries")
     .IsDependentOn("Version")
