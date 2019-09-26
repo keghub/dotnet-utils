@@ -97,6 +97,7 @@ Task("RunTests")
 
                 var dotCoverSettings = new DotCoverCoverSettings()
                                         .WithFilter("+:EMG*")
+                                        .WithFilter("-:Samples*")
                                         .WithFilter("-:Tests*")
                                         .WithFilter("-:TestUtils");
 
@@ -184,7 +185,14 @@ Task("UploadTestsToAppVeyor")
     foreach (var file in testResultFiles)
     {
         Information($"\tUploading {file.GetFilename()}");
-        AppVeyor.UploadTestResults(file, AppVeyorTestResultsType.MSTest);
+        try
+        {
+            AppVeyor.UploadTestResults(file, AppVeyorTestResultsType.MSTest);
+        }
+        catch 
+        {
+            Error($"Failed to upload {file.GetFilename()}");
+        }
     }
 });
 

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <AssemblyName>EMG.Utilities.ServiceModel</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>EMG.Utilities.ServiceModel</PackageId>
+    <PackageTags>wcf</PackageTags>
+    <Description>Set of helper classes to quickly configure your WCF application</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.ServiceModel.Discovery" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
+    <PackageReference Include="System.Reactive.Linq" Version="3.1.1" />
+  </ItemGroup>
+
+</Project>
