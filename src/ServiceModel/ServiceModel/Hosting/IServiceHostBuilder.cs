@@ -6,7 +6,7 @@ namespace EMG.Utilities.ServiceModel.Hosting
 {
     public interface IServiceHostBuilder
     {
-        ServiceHost Build(Type serviceType);
+        ServiceHost Build(Type serviceType, params Uri[] baseAddresses);
     }
 
     public class ServiceHostBuilder : IServiceHostBuilder
@@ -18,9 +18,9 @@ namespace EMG.Utilities.ServiceModel.Hosting
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
 
-        public ServiceHost Build(Type serviceType)
+        public ServiceHost Build(Type serviceType, params Uri[] baseAddresses)
         {
-            var serviceHost = new ServiceHost(serviceType);
+            var serviceHost = new ServiceHost(serviceType, baseAddresses);
 
             serviceHost.Description.Behaviors.Add(new DependencyInjectionServiceBehavior(_serviceProvider));
 

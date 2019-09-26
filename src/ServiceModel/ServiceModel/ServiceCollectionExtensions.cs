@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.ServiceModel.Channels;
 using EMG.Utilities.ServiceModel.Configuration;
 using EMG.Utilities.ServiceModel.Discovery;
@@ -17,6 +18,11 @@ namespace EMG.Utilities.ServiceModel
     {
         public static IServiceCollection AddWcfService<TService>(this IServiceCollection services, WcfServiceConfigurator<TService> configurator, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton) where TService : class
         {
+            if (services.Any(sd => sd.ImplementationType == typeof(TService)))
+            {
+                throw new ArgumentException($"The service {typeof(TService).Name} is already registered");
+            }
+
             services.AddSingleton<IServiceHostConfiguration<TService>>(sp =>
             {
                 var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
@@ -50,7 +56,7 @@ namespace EMG.Utilities.ServiceModel
             return services;
         }
 
-        public static IServiceCollection AddDiscovery<TBinding>(this IServiceCollection services, Uri announcementUri, TimeSpan interval, Action<TBinding> configureBinding = null)
+        public static IServiceCollection AddDiscovery<TBinding>(this IServiceCollection services, Uri registryUri, TimeSpan interval, Action<TBinding> configureBinding = null)
             where TBinding : Binding, new()
         {
             var binding = new TBinding();
@@ -59,7 +65,7 @@ namespace EMG.Utilities.ServiceModel
             services.Configure<AnnouncementServiceOptions>(options =>
             {
                 options.IsAnnouncementEnabled = true;
-                options.AnnouncementUri = announcementUri;
+                options.RegistryUri = registryUri;
                 options.Interval = interval;
                 options.Binding = binding;
             });

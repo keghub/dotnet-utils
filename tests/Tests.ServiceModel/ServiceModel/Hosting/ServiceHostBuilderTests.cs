@@ -1,4 +1,5 @@
-﻿using AutoFixture.Idioms;
+﻿using System;
+using AutoFixture.Idioms;
 using EMG.Utilities.ServiceModel.DependencyInjection;
 using EMG.Utilities.ServiceModel.Hosting;
 using NUnit.Framework;
@@ -29,6 +30,14 @@ namespace Tests.ServiceModel.Hosting
             var host = sut.Build(typeof(TestService));
 
             Assert.That(host.Description.Behaviors, Has.Exactly(1).InstanceOf<DependencyInjectionServiceBehavior>());
+        }
+
+        [Test, CustomAutoData]
+        public void Build_adds_base_addresses(ServiceHostBuilder sut, Uri baseAddress)
+        {
+            var host = sut.Build(typeof(TestService), baseAddress);
+
+            Assert.That(host.BaseAddresses, Contains.Item(baseAddress));
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using EMG.Utilities.ServiceModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace BasicHttpService
 {
@@ -13,7 +14,7 @@ namespace BasicHttpService
         {
             var services = new ServiceCollection();
 
-            services.AddLogging();
+            services.AddLogging(logging => logging.AddConsole().SetMinimumLevel(LogLevel.Trace));
 
             services.AddWcfService<TestService>(service =>
             {

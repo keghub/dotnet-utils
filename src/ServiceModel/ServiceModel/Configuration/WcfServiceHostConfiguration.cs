@@ -20,6 +20,8 @@ namespace EMG.Utilities.ServiceModel.Configuration
 
         public void ConfigureServiceHost(ServiceHost serviceHost)
         {
+            _logger.LogDebug("Configuring {SERVICE}", typeof(TService).FullName);
+
             AddServiceEndpoints();
 
             foreach (var action in ServiceHostConfigurations)
@@ -31,7 +33,7 @@ namespace EMG.Utilities.ServiceModel.Configuration
             {
                 foreach (var endpoint in _endpoints)
                 {
-                    _logger.LogDebug($"Adding {endpoint.Binding.GetType().Name} to address {endpoint.Address} for contract {endpoint.Contract.FullName}");
+                    _logger.LogDebug("Adding {BINDING} to address {ADDRESS} for contract {CONTRACT}", endpoint.Binding.GetType().Name, endpoint.Address, endpoint.Contract.FullName);
 
                     var serviceEndpoint = serviceHost.AddServiceEndpoint(endpoint.Contract, endpoint.Binding, endpoint.Address);
 

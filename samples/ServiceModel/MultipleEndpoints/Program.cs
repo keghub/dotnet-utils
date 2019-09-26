@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using EMG.Utilities.ServiceModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace MultipleEndpoints
 {
@@ -13,15 +14,15 @@ namespace MultipleEndpoints
         {
             var services = new ServiceCollection();
 
-            services.AddLogging();
+            services.AddLogging(logging => logging.AddConsole().SetMinimumLevel(LogLevel.Trace));
 
             services.AddWcfService<TestService>(service =>
             {
-                service.AddEndpoint<NetNamedPipeBinding>(typeof(ITestService), new Uri("net.pipe://localhost/test"));
+                service.AddNamedPipeEndpoint(typeof(ITestService), new Uri("net.pipe://localhost/test"));
 
-                service.AddEndpoint<BasicHttpBinding>(typeof(ITestService), new Uri("http://localhost:10001/test"));
+                service.AddBasicHttpEndpoint(typeof(ITestService), new Uri("http://localhost:10001/test"));
 
-                service.AddEndpoint<NetTcpBinding>(typeof(ITestService), new Uri("net.tcp://localhost:10000"));
+                service.AddNetTcpEndpoint(typeof(ITestService), new Uri("net.tcp://localhost:10000"));
 
                 service.EnableDefaultMetadata();
             });

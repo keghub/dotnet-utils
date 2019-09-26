@@ -17,7 +17,7 @@ namespace Tests.ServiceModel
     public class ServiceCollectionExtensionsTests
     {
         [Test, CustomAutoData]
-        public void ServiceCollection_is_returned(IServiceCollection services, WcfServiceConfigurator<TestService> configurator, ServiceLifetime lifetime)
+        public void AddWcfService_returns_same_ServiceCollection(IServiceCollection services, WcfServiceConfigurator<TestService> configurator, ServiceLifetime lifetime)
         {
             var result = ServiceCollectionExtensions.AddWcfService<TestService>(services, configurator, lifetime);
 
@@ -70,6 +70,14 @@ namespace Tests.ServiceModel
             ServiceCollectionExtensions.AddWcfService<TestService>(services, configurator, lifetime);
 
             Mock.Get(services).Verify(p => p.Add(It.Is<ServiceDescriptor>(d => d.ServiceType == typeof(TestService) && d.ImplementationType == typeof(TestService) && d.Lifetime == lifetime)));
+        }
+
+        [Test, CustomAutoData]
+        public void AddWcfService_throws_if_same_service_registered_twice(ServiceCollection services, WcfServiceConfigurator<TestService> configurator, ServiceLifetime lifetime)
+        {
+            ServiceCollectionExtensions.AddWcfService<TestService>(services, configurator, lifetime);
+
+            Assert.Throws<ArgumentException>(() => ServiceCollectionExtensions.AddWcfService<TestService>(services, configurator, lifetime));
         }
 
         [Test, CustomAutoData]

@@ -17,7 +17,7 @@ namespace EMG.Utilities.ServiceModel.Discovery
     {
         public bool IsAnnouncementEnabled { get; set; }
 
-        public Uri AnnouncementUri { get; set; }
+        public Uri RegistryUri { get; set; }
 
         public TimeSpan Interval { get; set; }
 
@@ -59,7 +59,7 @@ namespace EMG.Utilities.ServiceModel.Discovery
                     if (metadata != null)
                     {
                         client.AnnounceOnline(metadata);
-                        _logger.LogTrace($"[{endpoint.Contract.ContractType}] Announced {endpoint.Address.Uri} to {_options.AnnouncementUri}");
+                        _logger.LogTrace($"[{endpoint.Contract.ContractType}] Announced {endpoint.Address.Uri} to {_options.RegistryUri}");
                     }
                 }
             });
@@ -78,7 +78,7 @@ namespace EMG.Utilities.ServiceModel.Discovery
                         if (metadata != null)
                         {
                             client.AnnounceOffline(metadata);
-                            _logger.LogTrace($"Unannounced {endpoint.Address.Uri} to {_options.AnnouncementUri}");
+                            _logger.LogTrace($"Unannounced {endpoint.Address.Uri} to {_options.RegistryUri}");
                         }
 
                     }
@@ -88,7 +88,7 @@ namespace EMG.Utilities.ServiceModel.Discovery
 
         private AnnouncementClient CreateClient()
         {
-            var endpointAddress = new EndpointAddress(_options.AnnouncementUri);
+            var endpointAddress = new EndpointAddress(_options.RegistryUri);
             var endpoint = new AnnouncementEndpoint(_options.Binding, endpointAddress);
             return new AnnouncementClient(endpoint);
         }
