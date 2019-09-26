@@ -9,7 +9,7 @@ namespace EMG.Utilities.ServiceModel
 {
     public static class ServiceHostConfiguratorExtensions
     {
-        public static void EnableDefaultMetadata(this IServiceHostConfigurator configurator, Action<ServiceMetadataBehavior> serviceMetadataBehaviorConfigurator = null, string endpointAddress = "mex")
+        public static void AddMetadataEndpoints(this IServiceHostConfigurator configurator, Action<ServiceMetadataBehavior> serviceMetadataBehaviorConfigurator = null, string endpointAddress = "mex")
         {
             configurator.ServiceHostConfigurations.Add(host =>
             {
@@ -71,12 +71,14 @@ namespace EMG.Utilities.ServiceModel
             });
         }
 
+        public static void AddServiceBehavior(this IServiceHostConfigurator configurator, IServiceBehavior behavior)
+        {
+            configurator.ServiceHostConfigurations.Add(host => host.Description.Behaviors.Add(behavior));
+        }
+
         public static void AddExecutionLogging(this IServiceHostConfigurator configurator)
         {
-            configurator.ServiceHostConfigurations.Add(host =>
-            {
-                host.Description.Behaviors.Add(new ExecutionLoggingBehavior(configurator.LoggerFactory));
-            });
+            configurator.AddServiceBehavior(new ExecutionLoggingBehavior(configurator.LoggerFactory));
         }
 
         private static bool TryFindEndpointByBinding<TBinding>(ServiceHost host, out ServiceEndpoint endpoint)

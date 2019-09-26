@@ -34,7 +34,7 @@ namespace EMG.Utilities.ServiceModel
 
         public static IEndpoint Discoverable(this IEndpoint endpoint)
         {
-            return endpoint.AddBehavior(new AnnounceableEndpointBehavior());
+            return endpoint.AddBehavior(new AnnounceableBehavior());
         }
     }
 }

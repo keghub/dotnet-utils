@@ -4,7 +4,7 @@ using System.ServiceModel.Dispatcher;
 
 namespace EMG.Utilities.ServiceModel.Discovery
 {
-    public class AnnounceableEndpointBehavior : IEndpointBehavior
+    public class AnnounceableBehavior : IEndpointBehavior
     {
         public void Validate(ServiceEndpoint endpoint) { }
 

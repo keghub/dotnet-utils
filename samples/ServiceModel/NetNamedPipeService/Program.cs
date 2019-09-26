@@ -18,9 +18,7 @@ namespace NetNamedPipeService
 
             services.AddWcfService<TestService>(service =>
             {
-                service.AddEndpoint<NetNamedPipeBinding>(typeof(ITestService), new Uri("net.pipe://localhost/test"));
-
-                service.EnableDefaultMetadata();
+                service.AddNamedPipeEndpoint(typeof(ITestService), new Uri("net.pipe://localhost/test"));
             });
 
             var serviceProvider = services.BuildServiceProvider();
@@ -28,7 +26,7 @@ namespace NetNamedPipeService
             var hostedService = serviceProvider.GetService<IHostedService>();
 
             await hostedService.StartAsync(default);
-            
+
             Console.WriteLine("Press ENTER to exit...");
             Console.ReadLine();
 
@@ -45,8 +43,17 @@ namespace NetNamedPipeService
 
     public class TestService : ITestService
     {
+        private readonly ILogger<TestService> _logger;
+
+        public TestService(ILogger<TestService> logger)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
         public async Task DoSomethingAsync()
         {
+            _logger.LogInformation("We're going to do something amazing");
+
             await Task.Delay(TimeSpan.FromSeconds(1));
         }
     }

@@ -64,7 +64,7 @@ namespace Tests.ServiceModel
         {
             EndpointExtensions.Discoverable(endpoint);
 
-            Assert.That(endpoint.Behaviors, Has.One.InstanceOf<AnnounceableEndpointBehavior>());
+            Assert.That(endpoint.Behaviors, Has.One.InstanceOf<AnnounceableBehavior>());
         }
 
         [Test, CustomAutoData]

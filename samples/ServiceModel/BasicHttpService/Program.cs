@@ -20,7 +20,7 @@ namespace BasicHttpService
             {
                 service.AddEndpoint<BasicHttpBinding>(typeof(ITestService), new Uri("http://localhost:10001/test"));
 
-                service.EnableDefaultMetadata();
+                service.AddMetadataEndpoints();
             });
 
             var serviceProvider = services.BuildServiceProvider();

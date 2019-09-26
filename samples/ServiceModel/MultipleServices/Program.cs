@@ -21,14 +21,14 @@ namespace MultipleServices
             {
                 service.AddEndpoint<BasicHttpBinding>(typeof(ITestService), new Uri("http://localhost:10001/test"));
 
-                service.EnableDefaultMetadata();
+                service.AddMetadataEndpoints();
             });
 
             services.AddWcfService<AnotherTestService>(service =>
             {
                 service.AddEndpoint<BasicHttpBinding>(typeof(ITestService), new Uri("http://localhost:10002/test"));
 
-                service.EnableDefaultMetadata();
+                service.AddMetadataEndpoints();
             });
 
             var serviceProvider = services.BuildServiceProvider();

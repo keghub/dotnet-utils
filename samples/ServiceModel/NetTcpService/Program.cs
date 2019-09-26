@@ -20,7 +20,7 @@ namespace NetTcpService
             {
                 service.AddEndpoint<NetTcpBinding>(typeof(ITestService), new Uri("net.tcp://localhost:10000"));
 
-                service.EnableDefaultMetadata();
+                service.AddMetadataEndpoints();
             });
 
             var serviceProvider = services.BuildServiceProvider();

@@ -15,23 +15,23 @@ namespace Tests.ServiceModel
     public class ServiceHostConfiguratorExtensionsTests
     {
         [Test, CustomAutoData]
-        public void EnableDefaultMetadata_adds_service_host_configuration(WcfServiceHostConfiguration<TestService> configurator, Action<ServiceMetadataBehavior> serviceMetadataBehaviorConfigurator)
+        public void AddMetadataEndpoints_adds_service_host_configuration(WcfServiceHostConfiguration<TestService> configurator, Action<ServiceMetadataBehavior> serviceMetadataBehaviorConfigurator)
         {
             Assume.That(configurator.ServiceHostConfigurations, Is.Empty);
 
-            ServiceHostConfiguratorExtensions.EnableDefaultMetadata(configurator, serviceMetadataBehaviorConfigurator);
+            ServiceHostConfiguratorExtensions.AddMetadataEndpoints(configurator, serviceMetadataBehaviorConfigurator);
 
             Assert.That(configurator.ServiceHostConfigurations, Has.One.InstanceOf<Action<ServiceHost>>());
         }
 
         [Test, CustomAutoData]
-        public void EnableDefaultMetadata_adds_ServiceMetadataBehavior_to_host_with_NamedPipe_binding(WcfServiceHostConfiguration<TestService> configurator, ServiceHost host)
+        public void AddMetadataEndpoints_adds_ServiceMetadataBehavior_to_host_with_NamedPipe_binding(WcfServiceHostConfiguration<TestService> configurator, ServiceHost host)
         {
             configurator.AddEndpoint<NetNamedPipeBinding>(typeof(ITestService), new Uri("net.pipe://localhost/test"));
 
             configurator.ConfigureServiceHost(host);
 
-            ServiceHostConfiguratorExtensions.EnableDefaultMetadata(configurator);
+            ServiceHostConfiguratorExtensions.AddMetadataEndpoints(configurator);
 
             var configuration = configurator.ServiceHostConfigurations.First();
 
@@ -41,13 +41,13 @@ namespace Tests.ServiceModel
         }
 
         [Test, CustomAutoData]
-        public void EnableDefaultMetadata_adds_metadata_endpoint_to_host_with_NamedPipe_binding(WcfServiceHostConfiguration<TestService> configurator, ServiceHost host)
+        public void AddMetadataEndpoints_adds_metadata_endpoint_to_host_with_NamedPipe_binding(WcfServiceHostConfiguration<TestService> configurator, ServiceHost host)
         {
             configurator.AddEndpoint<NetNamedPipeBinding>(typeof(ITestService), new Uri("net.pipe://localhost/test"));
 
             configurator.ConfigureServiceHost(host);
 
-            ServiceHostConfiguratorExtensions.EnableDefaultMetadata(configurator);
+            ServiceHostConfiguratorExtensions.AddMetadataEndpoints(configurator);
 
             var configuration = configurator.ServiceHostConfigurations.First();
 
@@ -57,13 +57,13 @@ namespace Tests.ServiceModel
         }
 
         [Test, CustomAutoData]
-        public void EnableDefaultMetadata_adds_ServiceMetadataBehavior_to_host_with_NetTcp_binding(WcfServiceHostConfiguration<TestService> configurator, ServiceHost host)
+        public void AddMetadataEndpoints_adds_ServiceMetadataBehavior_to_host_with_NetTcp_binding(WcfServiceHostConfiguration<TestService> configurator, ServiceHost host)
         {
             configurator.AddEndpoint<NetTcpBinding>(typeof(ITestService), new Uri("net.tcp://localhost/test"));
 
             configurator.ConfigureServiceHost(host);
 
-            ServiceHostConfiguratorExtensions.EnableDefaultMetadata(configurator);
+            ServiceHostConfiguratorExtensions.AddMetadataEndpoints(configurator);
 
             var configuration = configurator.ServiceHostConfigurations.First();
 
@@ -73,13 +73,13 @@ namespace Tests.ServiceModel
         }
 
         [Test, CustomAutoData]
-        public void EnableDefaultMetadata_adds_metadata_endpoint_to_host_with_NetTcp_binding(WcfServiceHostConfiguration<TestService> configurator, ServiceHost host)
+        public void AddMetadataEndpoints_adds_metadata_endpoint_to_host_with_NetTcp_binding(WcfServiceHostConfiguration<TestService> configurator, ServiceHost host)
         {
             configurator.AddEndpoint<NetTcpBinding>(typeof(ITestService), new Uri("net.tcp://localhost/test"));
 
             configurator.ConfigureServiceHost(host);
 
-            ServiceHostConfiguratorExtensions.EnableDefaultMetadata(configurator);
+            ServiceHostConfiguratorExtensions.AddMetadataEndpoints(configurator);
 
             var configuration = configurator.ServiceHostConfigurations.First();
 
@@ -89,13 +89,13 @@ namespace Tests.ServiceModel
         }
 
         [Test, CustomAutoData]
-        public void EnableDefaultMetadata_adds_ServiceMetadataBehavior_to_host_with_BasicHttp_binding(WcfServiceHostConfiguration<TestService> configurator, ServiceHost host)
+        public void AddMetadataEndpoints_adds_ServiceMetadataBehavior_to_host_with_BasicHttp_binding(WcfServiceHostConfiguration<TestService> configurator, ServiceHost host)
         {
             configurator.AddEndpoint<BasicHttpBinding>(typeof(ITestService), new Uri("http://localhost/test"));
 
             configurator.ConfigureServiceHost(host);
 
-            ServiceHostConfiguratorExtensions.EnableDefaultMetadata(configurator);
+            ServiceHostConfiguratorExtensions.AddMetadataEndpoints(configurator);
 
             var configuration = configurator.ServiceHostConfigurations.First();
 
@@ -105,13 +105,13 @@ namespace Tests.ServiceModel
         }
 
         [Test, CustomAutoData]
-        public void EnableDefaultMetadata_adds_metadata_endpoint_to_host_with_BasicHttp_binding(WcfServiceHostConfiguration<TestService> configurator, ServiceHost host)
+        public void AddMetadataEndpoints_adds_metadata_endpoint_to_host_with_BasicHttp_binding(WcfServiceHostConfiguration<TestService> configurator, ServiceHost host)
         {
             configurator.AddEndpoint<BasicHttpBinding>(typeof(ITestService), new Uri("http://localhost/test"));
 
             configurator.ConfigureServiceHost(host);
 
-            ServiceHostConfiguratorExtensions.EnableDefaultMetadata(configurator);
+            ServiceHostConfiguratorExtensions.AddMetadataEndpoints(configurator);
 
             var configuration = configurator.ServiceHostConfigurations.First();
 
@@ -121,11 +121,11 @@ namespace Tests.ServiceModel
         }
 
         [Test, CustomAutoData]
-        public void EnableDefaultMetadata_throws_if_not_supported_endpoint_is_added(WcfServiceHostConfiguration<TestService> configurator, ServiceHost host)
+        public void AddMetadataEndpoints_throws_if_not_supported_endpoint_is_added(WcfServiceHostConfiguration<TestService> configurator, ServiceHost host)
         {
             configurator.ConfigureServiceHost(host);
 
-            ServiceHostConfiguratorExtensions.EnableDefaultMetadata(configurator);
+            ServiceHostConfiguratorExtensions.AddMetadataEndpoints(configurator);
 
             var configuration = configurator.ServiceHostConfigurations.First();
 

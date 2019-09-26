@@ -38,7 +38,7 @@ namespace Tests.ServiceModel.Discovery
 
             options.IsAnnouncementEnabled = true;
 
-            testEndpoint.Behaviors.Add(new AnnounceableEndpointBehavior());
+            testEndpoint.Behaviors.Add(new AnnounceableBehavior());
 
             var disposable = sut.AnnounceEndpoints(new[] { testEndpoint });
 

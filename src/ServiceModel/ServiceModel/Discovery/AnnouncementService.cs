@@ -42,7 +42,7 @@ namespace EMG.Utilities.ServiceModel.Discovery
                 return Disposable.Empty;
             }
 
-            var endpointsToAnnounce = endpoints.Where(e => e.HasBehavior<AnnounceableEndpointBehavior>()).ToArray();
+            var endpointsToAnnounce = endpoints.Where(e => e.HasBehavior<AnnounceableBehavior>()).ToArray();
 
             var observable = Observable.Interval(_options.Interval).Finally(() => UnannounceService(endpointsToAnnounce));
 
