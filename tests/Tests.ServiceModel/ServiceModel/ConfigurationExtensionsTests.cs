@@ -38,7 +38,7 @@ namespace Tests.ServiceModel
         }
 
         [Test, CustomAutoData]
-        public void GetBasicHttpEndpointAddress_can_return_endpoint(ConfigurationBuilder builder, BasicHttpEndpointAddress testAddress)
+        public void GetBasicHttpEndpointAddress_can_return_endpoint(ConfigurationBuilder builder, HttpEndpointAddress testAddress)
         {
             var configuration = builder.AddInMemoryCollection(new Dictionary<string, string>()
             {

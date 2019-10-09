@@ -47,7 +47,7 @@ namespace EMG.Utilities.ServiceModel.Configuration
 
         public Type ServiceType => typeof(TService);
 
-        public IEndpoint AddEndpoint<TBinding>(Type contract, Uri address, Action<TBinding> configureBinding = null)
+        public IEndpoint AddEndpoint<TBinding>(Type contract, EndpointAddress address, Action<TBinding> configureBinding = null)
             where TBinding : Binding, new()
         {
             if (!IsContractValidForService(contract))
@@ -57,9 +57,9 @@ namespace EMG.Utilities.ServiceModel.Configuration
 
             var binding = new TBinding();
 
-            if (!string.Equals(address.Scheme, binding.Scheme))
+            if (!address.CanSupportBinding(binding))
             {
-                throw new ArgumentException($"Binding scheme and address scheme don't match", nameof(address));
+                throw new ArgumentException("The address is not valid for the select binding", nameof(address));
             }
 
             configureBinding?.Invoke(binding);

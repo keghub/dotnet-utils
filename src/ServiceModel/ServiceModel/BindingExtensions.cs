@@ -18,6 +18,19 @@ namespace EMG.Utilities.ServiceModel
             return binding;
         }
 
+        public static WSHttpBinding UseHttps(this WSHttpBinding binding, Action<HttpTransportSecurity> configure = null)
+        {
+            binding.Security.Mode = SecurityMode.Transport;
+            configure?.Invoke(binding.Security.Transport);
+            return binding;
+        }
+
+        public static WSHttpBinding WithNoSecurity(this WSHttpBinding binding)
+        {
+            binding.Security.Mode = SecurityMode.None;
+            return binding;
+        }
+
         public static NetTcpBinding UseSecureChannel(this NetTcpBinding binding, Action<TcpTransportSecurity> configure = null)
         {
             binding.Security.Mode = SecurityMode.Transport;

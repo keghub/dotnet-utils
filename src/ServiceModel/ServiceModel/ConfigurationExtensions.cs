@@ -21,7 +21,7 @@ namespace EMG.Utilities.ServiceModel
 
         public static NamedPipeEndpointAddress GetNamedPipeEndpointAddress(this IConfiguration configuration) => GetEndpointAddress<NamedPipeEndpointAddress>(configuration);
 
-        public static BasicHttpEndpointAddress GetBasicHttpEndpointAddress(this IConfiguration configuration) => GetEndpointAddress<BasicHttpEndpointAddress>(configuration);
+        public static HttpEndpointAddress GetBasicHttpEndpointAddress(this IConfiguration configuration) => GetEndpointAddress<HttpEndpointAddress>(configuration);
     }
 
 }

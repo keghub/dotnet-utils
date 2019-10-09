@@ -6,6 +6,7 @@ using EMG.Utilities.ServiceModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using EndpointAddress = EMG.Utilities.ServiceModel.Configuration.EndpointAddress;
 
 namespace Samples
 {
@@ -19,14 +20,14 @@ namespace Samples
 
             services.AddWcfService<TestService>(service =>
             {
-                service.AddEndpoint<BasicHttpBinding>(typeof(ITestService), new Uri("http://localhost:10001/test"));
+                service.AddBasicHttpEndpoint(typeof(ITestService), EndpointAddress.ForHttp(port: 10001, path: "test"));
 
                 service.AddMetadataEndpoints();
             });
 
             services.AddWcfService<AnotherTestService>(service =>
             {
-                service.AddEndpoint<BasicHttpBinding>(typeof(ITestService), new Uri("http://localhost:10002/test"));
+                service.AddBasicHttpEndpoint(typeof(ITestService), EndpointAddress.ForHttp(port: 10002, path: "test"));
 
                 service.AddMetadataEndpoints();
             });

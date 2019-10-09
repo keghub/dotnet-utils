@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using EMG.Utilities.ServiceModel.Configuration;
 using EMG.Utilities.ServiceModel.Logging;
@@ -87,7 +88,9 @@ namespace EMG.Utilities.ServiceModel
             return endpoint != null;
         }
 
-        public static IEndpoint AddBasicHttpEndpoint(this IServiceHostConfigurator configurator, Type contract, BasicHttpEndpointAddress address, Action<BasicHttpBinding> configureBinding = null) => configurator.AddEndpoint(contract, address, configureBinding);
+        public static IEndpoint AddBasicHttpEndpoint(this IServiceHostConfigurator configurator, Type contract, HttpEndpointAddress address, Action<BasicHttpBinding> configureBinding = null) => configurator.AddEndpoint(contract, address, configureBinding);
+
+        public static IEndpoint AddWSHttpEndpoint(this IServiceHostConfigurator configurator, Type contract, HttpEndpointAddress address, Action<WSHttpBinding> configureBinding = null) => configurator.AddEndpoint(contract, address, configureBinding);
 
         public static IEndpoint AddNetTcpEndpoint(this IServiceHostConfigurator configurator, Type contract, NetTcpEndpointAddress address, Action<NetTcpBinding> configureBinding = null) => configurator.AddEndpoint(contract, address, configureBinding);
 

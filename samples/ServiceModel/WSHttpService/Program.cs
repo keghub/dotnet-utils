@@ -19,9 +19,9 @@ namespace Samples
 
             services.AddWcfService<TestService>(service =>
             {
-                service.AddBasicHttpEndpoint(typeof(ITestService), EndpointAddress.ForHttp(port: 10001, path: "test"));
+                service.AddWSHttpEndpoint(typeof(ITestService), EndpointAddress.ForHttp(port: 10001, path:"test"));
 
-                service.AddBasicHttpEndpoint(typeof(ITestService), EndpointAddress.ForHttp(port: 10002, path: "test", isSecure: true), binding => binding.UseHttps());
+                service.AddWSHttpEndpoint(typeof(ITestService), EndpointAddress.ForHttp(port: 10002, path: "test", isSecure: true), binding => binding.UseHttps());
 
                 service.AddMetadataEndpoints();
             });

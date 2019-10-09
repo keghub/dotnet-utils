@@ -155,11 +155,19 @@ namespace Tests.ServiceModel
         }
 
         [Test, CustomAutoData]
-        public void AddBasicHttpEndpoint_forwards_to_configurator(IServiceHostConfigurator configurator, Action<BasicHttpBinding> testDelegate, BasicHttpEndpointAddress address)
+        public void AddBasicHttpEndpoint_forwards_to_configurator(IServiceHostConfigurator configurator, Action<BasicHttpBinding> testDelegate, HttpEndpointAddress address)
         {
             configurator.AddBasicHttpEndpoint(typeof(ITestService), address, testDelegate);
 
             Mock.Get(configurator).Verify(p => p.AddEndpoint<BasicHttpBinding>(typeof(ITestService), address, testDelegate));
+        }
+
+        [Test, CustomAutoData]
+        public void AddWSHttpEndpoint_forwards_to_configurator(IServiceHostConfigurator configurator, Action<WSHttpBinding> testDelegate, HttpEndpointAddress address)
+        {
+            configurator.AddWSHttpEndpoint(typeof(ITestService), address, testDelegate);
+
+            Mock.Get(configurator).Verify(p => p.AddEndpoint<WSHttpBinding>(typeof(ITestService), address, testDelegate));
         }
 
         [Test, CustomAutoData]
