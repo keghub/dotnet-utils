@@ -7,7 +7,7 @@ namespace EMG.Utilities.ServiceModel.Configuration
 {
     public interface IEndpoint
     {
-        Uri Address { get; }
+        EndpointAddress Address { get; }
 
         Type Contract { get; }
 
@@ -18,7 +18,7 @@ namespace EMG.Utilities.ServiceModel.Configuration
 
     public class WcfEndpoint : IEndpoint
     {
-        public WcfEndpoint(Type contract, Uri address, Binding binding)
+        public WcfEndpoint(Type contract, EndpointAddress address, Binding binding)
         {
             Contract = contract;
             Address = address;
@@ -28,7 +28,7 @@ namespace EMG.Utilities.ServiceModel.Configuration
 
         public Type Contract { get; }
 
-        public Uri Address { get; }
+        public EndpointAddress Address { get; }
 
         public Binding Binding { get; }
 

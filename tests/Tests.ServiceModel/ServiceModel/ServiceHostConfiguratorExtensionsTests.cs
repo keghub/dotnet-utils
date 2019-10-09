@@ -155,7 +155,7 @@ namespace Tests.ServiceModel
         }
 
         [Test, CustomAutoData]
-        public void AddBasicHttpEndpoint_forwards_to_configurator(IServiceHostConfigurator configurator, Action<BasicHttpBinding> testDelegate, Uri address)
+        public void AddBasicHttpEndpoint_forwards_to_configurator(IServiceHostConfigurator configurator, Action<BasicHttpBinding> testDelegate, BasicHttpEndpointAddress address)
         {
             configurator.AddBasicHttpEndpoint(typeof(ITestService), address, testDelegate);
 
@@ -163,7 +163,7 @@ namespace Tests.ServiceModel
         }
 
         [Test, CustomAutoData]
-        public void AddNetTcpEndpoint_forwards_to_configurator(IServiceHostConfigurator configurator, Action<NetTcpBinding> testDelegate, Uri address)
+        public void AddNetTcpEndpoint_forwards_to_configurator(IServiceHostConfigurator configurator, Action<NetTcpBinding> testDelegate, NetTcpEndpointAddress address)
         {
             configurator.AddNetTcpEndpoint(typeof(ITestService), address, testDelegate);
 
@@ -171,7 +171,7 @@ namespace Tests.ServiceModel
         }
 
         [Test, CustomAutoData]
-        public void AddNamedPipeEndpoint_forwards_to_configurator(IServiceHostConfigurator configurator, Action<NetNamedPipeBinding> testDelegate, Uri address)
+        public void AddNamedPipeEndpoint_forwards_to_configurator(IServiceHostConfigurator configurator, Action<NetNamedPipeBinding> testDelegate, NamedPipeEndpointAddress address)
         {
             configurator.AddNamedPipeEndpoint(typeof(ITestService), address, testDelegate);
 

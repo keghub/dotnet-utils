@@ -87,20 +87,11 @@ namespace EMG.Utilities.ServiceModel
             return endpoint != null;
         }
 
-        public static IEndpoint AddBasicHttpEndpoint(this IServiceHostConfigurator configurator, Type contract, Uri address, Action<BasicHttpBinding> configureBinding = null)
-        {
-            return configurator.AddEndpoint(contract, address, configureBinding);
-        }
+        public static IEndpoint AddBasicHttpEndpoint(this IServiceHostConfigurator configurator, Type contract, BasicHttpEndpointAddress address, Action<BasicHttpBinding> configureBinding = null) => configurator.AddEndpoint(contract, address, configureBinding);
 
-        public static IEndpoint AddNetTcpEndpoint(this IServiceHostConfigurator configurator, Type contract, Uri address, Action<NetTcpBinding> configureBinding = null)
-        {
-            return configurator.AddEndpoint(contract, address, configureBinding);
-        }
+        public static IEndpoint AddNetTcpEndpoint(this IServiceHostConfigurator configurator, Type contract, NetTcpEndpointAddress address, Action<NetTcpBinding> configureBinding = null) => configurator.AddEndpoint(contract, address, configureBinding);
 
-        public static IEndpoint AddNamedPipeEndpoint(this IServiceHostConfigurator configurator, Type contract, Uri address, Action<NetNamedPipeBinding> configureBinding = null)
-        {
-            return configurator.AddEndpoint(contract, address, configureBinding);
-        }
+        public static IEndpoint AddNamedPipeEndpoint(this IServiceHostConfigurator configurator, Type contract, NamedPipeEndpointAddress address, Action<NetNamedPipeBinding> configureBinding = null) => configurator.AddEndpoint(contract, address, configureBinding);
     }
 
 }
