@@ -21,7 +21,7 @@ namespace Samples
             {
                 service.AddBasicHttpEndpoint(typeof(ITestService), EndpointAddress.ForHttp(port: 10001, path: "test"));
 
-                service.AddBasicHttpEndpoint(typeof(ITestService), EndpointAddress.ForHttp(port: 10002, path: "test", isSecure: true), binding => binding.UseHttps());
+                service.AddSecureBasicHttpEndpoint(typeof(ITestService), EndpointAddress.ForHttp(port: 10002, path: "test"));
 
                 service.AddMetadataEndpoints();
             });

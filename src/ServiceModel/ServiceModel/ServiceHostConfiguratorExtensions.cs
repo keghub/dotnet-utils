@@ -90,7 +90,31 @@ namespace EMG.Utilities.ServiceModel
 
         public static IEndpoint AddBasicHttpEndpoint(this IServiceHostConfigurator configurator, Type contract, HttpEndpointAddress address, Action<BasicHttpBinding> configureBinding = null) => configurator.AddEndpoint(contract, address, configureBinding);
 
+        public static IEndpoint AddSecureBasicHttpEndpoint(this IServiceHostConfigurator configurator, Type contract, HttpEndpointAddress address, Action<BasicHttpBinding> configureBinding = null)
+        {
+            var secureAddress = new HttpEndpointAddress { Host = address.Host, IsSecure = true, Path = address.Path, Port = address.Port };
+            return configurator.AddBasicHttpEndpoint(contract, secureAddress, ConfigureBinding);
+
+            void ConfigureBinding(BasicHttpBinding binding)
+            {
+                binding.UseHttps();
+                configureBinding?.Invoke(binding);
+            }
+        }
+
         public static IEndpoint AddWSHttpEndpoint(this IServiceHostConfigurator configurator, Type contract, HttpEndpointAddress address, Action<WSHttpBinding> configureBinding = null) => configurator.AddEndpoint(contract, address, configureBinding);
+
+        public static IEndpoint AddSecureWSHttpEndpoint(this IServiceHostConfigurator configurator, Type contract, HttpEndpointAddress address, Action<WSHttpBinding> configureBinding = null)
+        {
+            var secureAddress = new HttpEndpointAddress { Host = address.Host, IsSecure = true, Path = address.Path, Port = address.Port };
+            return configurator.AddWSHttpEndpoint(contract, secureAddress, ConfigureBinding);
+
+            void ConfigureBinding(WSHttpBinding binding)
+            {
+                binding.UseHttps();
+                configureBinding?.Invoke(binding);
+            }
+        }
 
         public static IEndpoint AddNetTcpEndpoint(this IServiceHostConfigurator configurator, Type contract, NetTcpEndpointAddress address, Action<NetTcpBinding> configureBinding = null) => configurator.AddEndpoint(contract, address, configureBinding);
 

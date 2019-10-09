@@ -12,7 +12,7 @@ namespace EMG.Utilities.ServiceModel.Configuration
 
         public override string ToString()
         {
-            return ToUri().ToString();
+            return $"Address: {ToUri()}";
         }
 
         public static implicit operator Uri(EndpointAddress address) => address.ToUri();

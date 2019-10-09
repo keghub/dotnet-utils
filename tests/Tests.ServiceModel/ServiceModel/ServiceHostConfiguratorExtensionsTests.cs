@@ -7,6 +7,8 @@ using EMG.Utilities.ServiceModel.Configuration;
 using EMG.Utilities.ServiceModel.Logging;
 using Moq;
 using NUnit.Framework;
+using EndpointAddress = EMG.Utilities.ServiceModel.Configuration.EndpointAddress;
+
 // ReSharper disable InvokeAsExtensionMethod
 
 namespace Tests.ServiceModel
@@ -163,11 +165,31 @@ namespace Tests.ServiceModel
         }
 
         [Test, CustomAutoData]
+        public void AddSecureBasicHttpEndpoint_forwards_to_configurator(IServiceHostConfigurator configurator, Action<BasicHttpBinding> testDelegate, string host, string path, int port)
+        {
+            var address = EndpointAddress.ForHttp(host, path, port, false);
+
+            configurator.AddSecureBasicHttpEndpoint(typeof(ITestService), address, testDelegate);
+
+            Mock.Get(configurator).Verify(p => p.AddEndpoint<BasicHttpBinding>(typeof(ITestService), It.Is<HttpEndpointAddress>(a => a.IsSecure && a.Host == host && a.Port == port && a.Path == path), It.IsAny<Action<BasicHttpBinding>>()));
+        }
+
+        [Test, CustomAutoData]
         public void AddWSHttpEndpoint_forwards_to_configurator(IServiceHostConfigurator configurator, Action<WSHttpBinding> testDelegate, HttpEndpointAddress address)
         {
             configurator.AddWSHttpEndpoint(typeof(ITestService), address, testDelegate);
 
             Mock.Get(configurator).Verify(p => p.AddEndpoint<WSHttpBinding>(typeof(ITestService), address, testDelegate));
+        }
+
+        [Test, CustomAutoData]
+        public void AddSecureWSHttpEndpoint_forwards_to_configurator(IServiceHostConfigurator configurator, Action<WSHttpBinding> testDelegate, string host, string path, int port)
+        {
+            var address = EndpointAddress.ForHttp(host, path, port, false);
+
+            configurator.AddSecureWSHttpEndpoint(typeof(ITestService), address, testDelegate);
+
+            Mock.Get(configurator).Verify(p => p.AddEndpoint<WSHttpBinding>(typeof(ITestService), It.Is<HttpEndpointAddress>(a => a.IsSecure && a.Host == host && a.Port == port && a.Path == path), It.IsAny<Action<WSHttpBinding>>()));
         }
 
         [Test, CustomAutoData]
