@@ -34,7 +34,7 @@ namespace Tests.ServiceModel.Configuration
         }
 
         [Test, CustomAutoData]
-        public void ConfigureServiceHost_adds_custom_endpoint_behaviors(WcfServiceHostConfiguration<TestService> sut, ServiceHost host, Uri endpointAddress, IEndpointBehavior endpointBehavior)
+        public void ConfigureServiceHost_adds_custom_endpoint_behaviors(WcfServiceHostConfiguration<TestService> sut, ServiceHost host, GenericEndpointAddress endpointAddress, IEndpointBehavior endpointBehavior)
         {
             sut.AddEndpoint<TestHttpBinding>(typeof(ITestService), endpointAddress).Behaviors.Add(endpointBehavior);
 
@@ -44,7 +44,7 @@ namespace Tests.ServiceModel.Configuration
         }
 
         [Test, CustomAutoData]
-        public void AddEndpoint_registers_endpoint_for_given_binding(WcfServiceHostConfiguration<TestService> sut, Uri endpointAddress, Action<TestHttpBinding> bindingConfiguration, ServiceHost host)
+        public void AddEndpoint_registers_endpoint_for_given_binding(WcfServiceHostConfiguration<TestService> sut, GenericEndpointAddress endpointAddress, Action<TestHttpBinding> bindingConfiguration, ServiceHost host)
         {
             sut.AddEndpoint<TestHttpBinding>(typeof(ITestService), endpointAddress, bindingConfiguration);
 
@@ -54,7 +54,7 @@ namespace Tests.ServiceModel.Configuration
         }
 
         [Test, CustomAutoData]
-        public void AddEndpoint_registers_endpoint_for_given_binding(WcfServiceHostConfiguration<TestService> sut, Uri endpointAddress, ServiceHost host)
+        public void AddEndpoint_registers_endpoint_for_given_binding(WcfServiceHostConfiguration<TestService> sut, GenericEndpointAddress endpointAddress, ServiceHost host)
         {
             sut.AddEndpoint<TestHttpBinding>(typeof(ITestService), endpointAddress);
 
@@ -64,7 +64,7 @@ namespace Tests.ServiceModel.Configuration
         }
 
         [Test, CustomAutoData]
-        public void AddEndpoint_uses_binding_configuration_when_given(WcfServiceHostConfiguration<TestService> sut, Uri endpointAddress, Action<TestHttpBinding> bindingConfiguration, ServiceHost host)
+        public void AddEndpoint_uses_binding_configuration_when_given(WcfServiceHostConfiguration<TestService> sut, GenericEndpointAddress endpointAddress, Action<TestHttpBinding> bindingConfiguration, ServiceHost host)
         {
             sut.AddEndpoint<TestHttpBinding>(typeof(ITestService), endpointAddress, bindingConfiguration);
 

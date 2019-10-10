@@ -19,11 +19,9 @@ namespace Samples
 
             services.AddWcfService<TestService>(service =>
             {
-                service.AddNamedPipeEndpoint(typeof(ITestService), EndpointAddress.ForNamedPipe("test"));
+                service.AddWSHttpEndpoint(typeof(ITestService), EndpointAddress.ForHttp(port: 10001, path:"test"));
 
-                service.AddBasicHttpEndpoint(typeof(ITestService), EndpointAddress.ForHttp(port: 10001, path: "test"));
-
-                service.AddNetTcpEndpoint(typeof(ITestService), EndpointAddress.ForNetTcp(10000));
+                service.AddSecureWSHttpEndpoint(typeof(ITestService), EndpointAddress.ForHttp(port: 10002, path: "test"));
 
                 service.AddMetadataEndpoints();
             });
@@ -55,4 +53,5 @@ namespace Samples
             await Task.Delay(TimeSpan.FromSeconds(1));
         }
     }
+
 }

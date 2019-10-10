@@ -5,8 +5,9 @@ using EMG.Utilities.ServiceModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using EndpointAddress = EMG.Utilities.ServiceModel.Configuration.EndpointAddress;
 
-namespace Samples.ServiceModel
+namespace Samples
 {
     class Program
     {
@@ -18,7 +19,7 @@ namespace Samples.ServiceModel
 
             services.AddWcfService<TestService>(service =>
             {
-                service.AddEndpoint<NetTcpBinding>(typeof(ITestService), new Uri("net.tcp://localhost:10000"));
+                service.AddNetTcpEndpoint(typeof(ITestService), EndpointAddress.ForNetTcp(port: 10000));
 
                 service.AddMetadataEndpoints();
             });

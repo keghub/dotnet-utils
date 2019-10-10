@@ -52,6 +52,50 @@ namespace Tests.ServiceModel
     }
 
     [TestFixture]
+    public class WSHttpBindingExtensionsTests
+    {
+        [Test, CustomAutoData]
+        public void UseHttps_sets_security_mode_to_Transport(WSHttpBinding binding)
+        {
+            BindingExtensions.UseHttps(binding);
+
+            Assert.That(binding.Security.Mode, Is.EqualTo(SecurityMode.Transport));
+        }
+
+        [Test, CustomAutoData]
+        public void UseHttps_uses_delegate_to_configure_transport_node(WSHttpBinding binding, Action<HttpTransportSecurity> testDelegate)
+        {
+            BindingExtensions.UseHttps(binding, testDelegate);
+
+            Mock.Get(testDelegate).Verify(p => p(binding.Security.Transport));
+        }
+
+        [Test, CustomAutoData]
+        public void UseHttps_returns_binding(WSHttpBinding binding)
+        {
+            var result = BindingExtensions.UseHttps(binding);
+
+            Assert.That(result, Is.SameAs(binding));
+        }
+
+        [Test, CustomAutoData]
+        public void WithNoSecurity_sets_security_mode_to_None(WSHttpBinding binding)
+        {
+            BindingExtensions.WithNoSecurity(binding);
+
+            Assert.That(binding.Security.Mode, Is.EqualTo(SecurityMode.None));
+        }
+
+        [Test, CustomAutoData]
+        public void WithNoSecurity_returns_binding(WSHttpBinding binding)
+        {
+            var result = BindingExtensions.WithNoSecurity(binding);
+
+            Assert.That(result, Is.SameAs(binding));
+        }
+    }
+
+    [TestFixture]
     public class NetTcpBindingExtensionsTests
     {
         [Test, CustomAutoData]
