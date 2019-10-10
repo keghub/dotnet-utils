@@ -14,7 +14,7 @@ namespace Tests.ServiceModel.Configuration
             EndpointAddress address = testUri;
 
             Assert.That(address, Is.Not.Null);
-            
+
             Assert.That(address.ToUri(), Is.EqualTo(testUri));
         }
 
@@ -59,7 +59,7 @@ namespace Tests.ServiceModel.Configuration
         [Test, CustomAutoData]
         public void ToString_returns_formed_Uri(NetTcpEndpointAddress testAddress)
         {
-            Assert.That(testAddress.ToString(), Is.EqualTo(testAddress.ToUri().ToString()));
+            Assert.That(testAddress.ToString(), Is.EqualTo($"Address: {testAddress.ToUri()}"));
         }
 
         [Test, CustomAutoData]
@@ -115,7 +115,7 @@ namespace Tests.ServiceModel.Configuration
         [Test, CustomAutoData]
         public void ToString_returns_formed_Uri(NamedPipeEndpointAddress testAddress)
         {
-            Assert.That(testAddress.ToString(), Is.EqualTo(testAddress.ToUri().ToString()));
+            Assert.That(testAddress.ToString(), Is.EqualTo($"Address: {testAddress.ToUri()}"));
         }
 
         [Test, CustomAutoData]
@@ -161,7 +161,7 @@ namespace Tests.ServiceModel.Configuration
         [Test, CustomAutoData]
         public void ToString_returns_formed_Uri(HttpEndpointAddress testAddress)
         {
-            Assert.That(testAddress.ToString(), Is.EqualTo(testAddress.ToUri().ToString()));
+            Assert.That(testAddress.ToString(), Is.EqualTo($"Address: {testAddress.ToUri()}"));
         }
 
         [Test, CustomAutoData]
