@@ -11,7 +11,7 @@ namespace Tests
         [Test, AutoData]
         public void TestClock_can_be_initialized_with_set_time([Frozen] DateTimeOffset pointInTime, TestClock sut)
         {
-            Assert.That(sut.UtcNow, Is.EqualTo(pointInTime));
+            Assert.That(sut.UtcNow, Is.EqualTo(pointInTime.ToUniversalTime()));
         }
 
         [Test, AutoData]
@@ -19,7 +19,7 @@ namespace Tests
         {
             sut.AdvanceBy(advanceBy);
 
-            Assert.That(sut.UtcNow, Is.EqualTo(pointInTime + advanceBy));
+            Assert.That(sut.UtcNow, Is.EqualTo(pointInTime.ToUniversalTime() + advanceBy));
         }
 
         [Test, AutoData]
@@ -27,17 +27,17 @@ namespace Tests
         {
             sut.SetTo(pointInTime);
 
-            Assert.That(sut.UtcNow, Is.EqualTo(pointInTime));
+            Assert.That(sut.UtcNow, Is.EqualTo(pointInTime.ToUniversalTime()));
         }
 
         [Test, AutoData]
         public void TestClock_can_be_reset_to_current_time(TestClock sut)
         {
-            Assume.That(sut.UtcNow, Is.Not.EqualTo(DateTimeOffset.UtcNow).Within(TimeSpan.FromMilliseconds(100)));
+            Assume.That(sut.UtcNow, Is.Not.EqualTo(DateTimeOffset.UtcNow.ToUniversalTime()).Within(TimeSpan.FromMilliseconds(100)));
 
             sut.ResetToCurrent();
 
-            Assert.That(sut.UtcNow, Is.EqualTo(DateTimeOffset.UtcNow).Within(TimeSpan.FromMilliseconds(100)));
+            Assert.That(sut.UtcNow, Is.EqualTo(DateTimeOffset.UtcNow.ToUniversalTime()).Within(TimeSpan.FromMilliseconds(100)));
         }
     }
 }
