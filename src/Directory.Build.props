@@ -14,7 +14,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/emgdev/dotnet-utils</PackageProjectUrl>
     <PackageIconUrl>http://static.emg-services.net/masterpages/pics/logos/emg-icon-64.png</PackageIconUrl>
-    <NoWarn>NU5105,NU5125</NoWarn>
+    <NoWarn>NU5105,NU5125,NU5048</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>

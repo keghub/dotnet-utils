@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <AssemblyName>EMG.Utilities.ServiceModel.ECS</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>EMG.Utilities.ServiceModel.ECS</PackageId>
+    <PackageTags>wcf</PackageTags>
+    <Description>Extensions to EMG.Utilities.ServiceModel to support WCF services in AWS ECS</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EMG.Extensions.Configuration.ECSContainerMetadata" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ServiceModel\ServiceModel.csproj" />
+  </ItemGroup>
+
+</Project>
