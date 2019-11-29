@@ -31,7 +31,7 @@ namespace EMG.Utilities
                 return endpointAddress;
             }
 
-            return EndpointAddress.ForHttp(containerMetadata.HostPrivateIPv4Address, endpointAddress.Path, containerMetadata.PortMappings[0].HostPort, endpointAddress.IsSecure);
+            return EndpointAddress.ForHttp(containerMetadata.HostPrivateIPv4Address, endpointAddress.Path, portMapping.HostPort, endpointAddress.IsSecure);
         }
 
         public static NetTcpEndpointAddress UseECS(this NetTcpEndpointAddress endpointAddress, IConfiguration configuration, Action<ECSContainerMetadataOptions> configureOptions = null)
