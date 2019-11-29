@@ -2,7 +2,6 @@ using Moq;
 using NUnit.Framework;
 using System;
 using AutoFixture.NUnit3;
-using EMG.Extensions.Configuration;
 using EMG.Extensions.Configuration.Model;
 using EMG.Utilities;
 using EMG.Utilities.ServiceModel.Configuration;
@@ -71,6 +70,62 @@ namespace Tests
             var newEndpoint = ECSMetadataExtensions.UseECS(endpointAddress, configuration, options => options.PortMappingSelector = items => mapping);
 
             Assert.That(newEndpoint.Port, Is.EqualTo(mapping.HostPort));
+        }
+
+        [Test, CustomAutoData]
+        public void UseECS_returns_same_address_if_ECSContainerMetadataFileKey_not_available(HttpEndpointAddress endpointAddress, IConfiguration configuration)
+        {
+            var newEndpoint = ECSMetadataExtensions.UseECS(endpointAddress, configuration);
+
+            Assert.That(newEndpoint, Is.SameAs(endpointAddress));
+        }
+
+        [Test, CustomAutoData]
+        public void UseECS_returns_same_address_if_ECSContainerMetadataFileKey_not_available(NetTcpEndpointAddress endpointAddress, IConfiguration configuration)
+        {
+            var newEndpoint = ECSMetadataExtensions.UseECS(endpointAddress, configuration);
+
+            Assert.That(newEndpoint, Is.SameAs(endpointAddress));
+        }
+
+        [Test, CustomAutoData]
+        public void UseECS_returns_same_address_if_metadata_not_found_in_configuration(HttpEndpointAddress endpointAddress, ConfigurationBuilder configurationBuilder, string filePath)
+        {
+            Environment.SetEnvironmentVariable(EMG.Extensions.Configuration.ECSMetadataExtensions.ECSContainerMetadataFileKey, filePath);
+
+            var newEndpoint = ECSMetadataExtensions.UseECS(endpointAddress, configurationBuilder.Build());
+
+            Assert.That(newEndpoint, Is.SameAs(endpointAddress));
+        }
+
+        [Test, CustomAutoData]
+        public void UseECS_returns_same_address_if_metadata_not_found_in_configuration(NetTcpEndpointAddress endpointAddress, ConfigurationBuilder configurationBuilder, string filePath)
+        {
+            Environment.SetEnvironmentVariable(EMG.Extensions.Configuration.ECSMetadataExtensions.ECSContainerMetadataFileKey, filePath);
+
+            var newEndpoint = ECSMetadataExtensions.UseECS(endpointAddress, configurationBuilder.Build());
+
+            Assert.That(newEndpoint, Is.SameAs(endpointAddress));
+        }
+
+        [Test, CustomAutoData]
+        public void UseECS_returns_same_address_if_port_mapping_is_null(HttpEndpointAddress endpointAddress, IConfiguration configuration, string filePath)
+        {
+            Environment.SetEnvironmentVariable(EMG.Extensions.Configuration.ECSMetadataExtensions.ECSContainerMetadataFileKey, filePath);
+
+            var newEndpoint = ECSMetadataExtensions.UseECS(endpointAddress, configuration, options => options.PortMappingSelector = list => null);
+
+            Assert.That(newEndpoint, Is.SameAs(endpointAddress));
+        }
+
+        [Test, CustomAutoData]
+        public void UseECS_returns_same_address_if_port_mapping_is_null(NetTcpEndpointAddress endpointAddress, IConfiguration configuration, string filePath)
+        {
+            Environment.SetEnvironmentVariable(EMG.Extensions.Configuration.ECSMetadataExtensions.ECSContainerMetadataFileKey, filePath);
+
+            var newEndpoint = ECSMetadataExtensions.UseECS(endpointAddress, configuration, options => options.PortMappingSelector = list => null);
+
+            Assert.That(newEndpoint, Is.SameAs(endpointAddress));
         }
 
         [TearDown]
