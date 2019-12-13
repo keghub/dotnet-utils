@@ -5,7 +5,10 @@ using AutoFixture.NUnit3;
 using EMG.Extensions.Configuration.Model;
 using EMG.Utilities;
 using EMG.Utilities.ServiceModel.Configuration;
+using EMG.Utilities.ServiceModel.Discovery;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using ECSMetadataExtensions = EMG.Utilities.ECSMetadataExtensions;
 
 // ReSharper disable InvokeAsExtensionMethod
@@ -135,6 +138,17 @@ namespace Tests
         public void TearDown()
         {
             Environment.SetEnvironmentVariable(EMG.Extensions.Configuration.ECSMetadataExtensions.ECSContainerMetadataFileKey, null);
+        }
+
+
+        [Test, CustomAutoData]
+        public void AddECSContainerSupport_configures_AnnouncementServiceOptions(IServiceCollection services, IConfiguration configuration, string filePath)
+        {
+            Environment.SetEnvironmentVariable(EMG.Extensions.Configuration.ECSMetadataExtensions.ECSContainerMetadataFileKey, filePath);
+
+            ECSMetadataExtensions.AddECSContainerSupport(services, configuration);
+
+            Mock.Get(services).Verify(p => p.Add(It.Is<ServiceDescriptor>(sd => sd.ServiceType == typeof(IConfigureOptions<AnnouncementServiceOptions>))));
         }
     }
 }
