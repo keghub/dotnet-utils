@@ -8,6 +8,9 @@ using EMG.Utilities.ServiceModel.Configuration;
 using Microsoft.Extensions.Configuration;
 using ECSMetadataExtensions = EMG.Utilities.ECSMetadataExtensions;
 
+// ReSharper disable InvokeAsExtensionMethod
+#pragma warning disable 618
+
 namespace Tests
 {
     public class ECSMetadataExtensionsTests

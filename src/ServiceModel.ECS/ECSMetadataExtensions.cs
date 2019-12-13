@@ -101,13 +101,9 @@ namespace EMG.Utilities
                     Port = GetMappedPortOrDefault(containerMetadata.PortMappings, endpointMetadata.Address.Uri.Port)
                 };
 
-                var newMetadata = new EndpointDiscoveryMetadata
-                {
-                    Address = new System.ServiceModel.EndpointAddress(uriBuilder.Uri.ToString()),
-                    Version = endpointMetadata.Version
-                };
+                endpointMetadata.Address = new System.ServiceModel.EndpointAddress(uriBuilder.Uri.ToString());
 
-                return newMetadata;
+                return endpointMetadata;
             }
 
             int GetMappedPortOrDefault(IEnumerable<PortMapping> mappings, int port)
