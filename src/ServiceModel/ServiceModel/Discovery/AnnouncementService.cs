@@ -22,6 +22,8 @@ namespace EMG.Utilities.ServiceModel.Discovery
         public TimeSpan Interval { get; set; }
 
         public Binding Binding { get; set; }
+
+        public Func<ServiceEndpoint, EndpointDiscoveryMetadata> EndpointDiscoveryMetadata { get; set; } = System.ServiceModel.Discovery.EndpointDiscoveryMetadata.FromServiceEndpoint;
     }
 
     public class AnnouncementService : IAnnouncementService
@@ -54,7 +56,7 @@ namespace EMG.Utilities.ServiceModel.Discovery
             {
                 using (var client = CreateClient())
                 {
-                    var metadata = EndpointDiscoveryMetadata.FromServiceEndpoint(endpoint);
+                    var metadata = _options.EndpointDiscoveryMetadata(endpoint);
 
                     if (metadata != null)
                     {
@@ -73,7 +75,7 @@ namespace EMG.Utilities.ServiceModel.Discovery
                 {
                     foreach (var endpoint in endpoints)
                     {
-                        var metadata = EndpointDiscoveryMetadata.FromServiceEndpoint(endpoint);
+                        var metadata = _options.EndpointDiscoveryMetadata(endpoint);
 
                         if (metadata != null)
                         {
