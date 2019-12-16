@@ -24,4 +24,11 @@
     <ProjectReference Include="..\..\src\ServiceModel.ECS\ServiceModel.ECS.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Discovery">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.ServiceModel.Discovery.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

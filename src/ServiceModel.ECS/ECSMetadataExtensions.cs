@@ -74,13 +74,18 @@ namespace EMG.Utilities
         {
             if (Environment.GetEnvironmentVariable(EMG.Extensions.Configuration.ECSMetadataExtensions.ECSContainerMetadataFileKey) != null)
             {
-                services.Configure<AnnouncementServiceOptions>(o => o.EndpointDiscoveryMetadata = GetMetadataForEndpoint);
+                services.Configure<AnnouncementServiceOptions>(o => o.EndpointDiscoveryMetadata = GetEndpointMetadataFromECS);
             }
 
             return services;
 
-            EndpointDiscoveryMetadata GetMetadataForEndpoint(ServiceEndpoint endpoint)
+            EndpointDiscoveryMetadata GetEndpointMetadataFromECS(ServiceEndpoint endpoint)
             {
+                if (endpoint.Address is null)
+                {
+                    throw new ArgumentNullException(nameof(endpoint),"endpoint address should not be null");
+                }
+
                 var containerMetadata = configuration.Get<ECSContainerMetadata>();
 
                 var endpointMetadata = EndpointDiscoveryMetadata.FromServiceEndpoint(endpoint);
