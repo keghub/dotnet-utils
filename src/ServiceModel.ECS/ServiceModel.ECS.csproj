@@ -19,4 +19,9 @@
     <ProjectReference Include="..\ServiceModel\ServiceModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Discovery" />
+  </ItemGroup>
+
 </Project>
