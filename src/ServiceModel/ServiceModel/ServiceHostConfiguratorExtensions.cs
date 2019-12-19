@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using EMG.Utilities.ServiceModel.Configuration;
 using EMG.Utilities.ServiceModel.Logging;
@@ -12,6 +11,11 @@ namespace EMG.Utilities.ServiceModel
     {
         public static void AddMetadataEndpoints(this IServiceHostConfigurator configurator, Action<ServiceMetadataBehavior> serviceMetadataBehaviorConfigurator = null, string endpointAddress = "mex")
         {
+            if (configurator is null)
+            {
+                throw new ArgumentNullException(nameof(configurator));
+            }
+
             configurator.ServiceHostConfigurations.Add(host =>
             {
                 var behavior = host.Description.Behaviors.Find<ServiceMetadataBehavior>();
@@ -51,14 +55,14 @@ namespace EMG.Utilities.ServiceModel
 
                 if (TryFindEndpointByBinding<NetNamedPipeBinding>(host, out var netNamedEndpoint))
                 {
-                    host.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexNamedPipeBinding(), $"{netNamedEndpoint.Address.Uri}/mex");
+                    host.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexNamedPipeBinding(), $"{netNamedEndpoint.Address.Uri}/{endpointAddress}");
 
                     hasSupportedEndpoint = true;
                 }
 
                 if (TryFindEndpointByBinding<NetTcpBinding>(host, out var netTcpEndpoint))
                 {
-                    host.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexTcpBinding(), $"{netTcpEndpoint.Address.Uri}/mex");
+                    host.AddServiceEndpoint(ServiceMetadataBehavior.MexContractName, MetadataExchangeBindings.CreateMexTcpBinding(), $"{netTcpEndpoint.Address.Uri}/{endpointAddress}");
 
                     hasSupportedEndpoint = true;
                 }
@@ -72,13 +76,47 @@ namespace EMG.Utilities.ServiceModel
             });
         }
 
+        public static void ConfigureService(this IServiceHostConfigurator configurator, Action<ServiceBehaviorAttribute> configureService)
+        {
+            if (configurator is null)
+            {
+                throw new ArgumentNullException(nameof(configurator));
+            }
+
+            if (configureService is null)
+            {
+                throw new ArgumentNullException(nameof(configureService));
+            }
+
+            configurator.ServiceHostConfigurations.Add(host =>
+            {
+                var serviceBehavior = host.Description.Behaviors.Find<ServiceBehaviorAttribute>();
+                configureService(serviceBehavior);
+            });
+        }
+
         public static void AddServiceBehavior(this IServiceHostConfigurator configurator, IServiceBehavior behavior)
         {
+            if (configurator is null)
+            {
+                throw new ArgumentNullException(nameof(configurator));
+            }
+
+            if (behavior is null)
+            {
+                throw new ArgumentNullException(nameof(behavior));
+            }
+
             configurator.ServiceHostConfigurations.Add(host => host.Description.Behaviors.Add(behavior));
         }
 
         public static void AddExecutionLogging(this IServiceHostConfigurator configurator)
         {
+            if (configurator is null)
+            {
+                throw new ArgumentNullException(nameof(configurator));
+            }
+
             configurator.AddServiceBehavior(new ExecutionLoggingBehavior(configurator.LoggerFactory));
         }
 
@@ -92,6 +130,21 @@ namespace EMG.Utilities.ServiceModel
 
         public static IEndpoint AddSecureBasicHttpEndpoint(this IServiceHostConfigurator configurator, Type contract, HttpEndpointAddress address, Action<BasicHttpBinding> configureBinding = null)
         {
+            if (configurator is null)
+            {
+                throw new ArgumentNullException(nameof(configurator));
+            }
+
+            if (contract is null)
+            {
+                throw new ArgumentNullException(nameof(contract));
+            }
+
+            if (address is null)
+            {
+                throw new ArgumentNullException(nameof(address));
+            }
+
             var secureAddress = new HttpEndpointAddress { Host = address.Host, IsSecure = true, Path = address.Path, Port = address.Port };
             return configurator.AddBasicHttpEndpoint(contract, secureAddress, ConfigureBinding);
 
@@ -106,6 +159,21 @@ namespace EMG.Utilities.ServiceModel
 
         public static IEndpoint AddSecureWSHttpEndpoint(this IServiceHostConfigurator configurator, Type contract, HttpEndpointAddress address, Action<WSHttpBinding> configureBinding = null)
         {
+            if (configurator is null)
+            {
+                throw new ArgumentNullException(nameof(configurator));
+            }
+
+            if (contract is null)
+            {
+                throw new ArgumentNullException(nameof(contract));
+            }
+
+            if (address is null)
+            {
+                throw new ArgumentNullException(nameof(address));
+            }
+
             var secureAddress = new HttpEndpointAddress { Host = address.Host, IsSecure = true, Path = address.Path, Port = address.Port };
             return configurator.AddWSHttpEndpoint(contract, secureAddress, ConfigureBinding);
 

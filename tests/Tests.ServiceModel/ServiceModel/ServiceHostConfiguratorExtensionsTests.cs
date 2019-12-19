@@ -2,6 +2,7 @@
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
+using AutoFixture.Idioms;
 using EMG.Utilities.ServiceModel;
 using EMG.Utilities.ServiceModel.Configuration;
 using EMG.Utilities.ServiceModel.Logging;
@@ -206,6 +207,38 @@ namespace Tests.ServiceModel
             configurator.AddNamedPipeEndpoint(typeof(ITestService), address, testDelegate);
 
             Mock.Get(configurator).Verify(p => p.AddEndpoint<NetNamedPipeBinding>(typeof(ITestService), address, testDelegate));
+        }
+
+        [Test, CustomAutoData]
+        public void ConfigureService_alters_ServiceBehaviorAttribute(WcfServiceHostConfiguration<TestService> configurator, Action<ServiceBehaviorAttribute> testDelegate, ServiceHost serviceHost)
+        {
+            configurator.ConfigureService(testDelegate);
+
+            configurator.ConfigureServiceHost(serviceHost);
+
+            Mock.Get(testDelegate).Verify(p => p(serviceHost.Description.Behaviors.Find<ServiceBehaviorAttribute>()));
+        }
+
+        [Test, CustomAutoData]
+        public void ConfigureService_alters_ServiceBehaviorAttribute(WcfServiceHostConfiguration<TestService> configurator, ServiceHost serviceHost, AddressFilterMode filterMode)
+        {
+            configurator.ConfigureService(service => service.AddressFilterMode = filterMode);
+
+            configurator.ConfigureServiceHost(serviceHost);
+
+            Assert.That(serviceHost.Description.Behaviors.Find<ServiceBehaviorAttribute>().AddressFilterMode, Is.EqualTo(filterMode));
+        }
+
+        [Test, CustomAutoData]
+        public void ConfigureService_checks_for_nulls(GuardClauseAssertion assertion)
+        {
+            assertion.Verify(typeof(ServiceHostConfiguratorExtensions).GetMethod(nameof(ServiceHostConfiguratorExtensions.ConfigureService)));
+        }
+
+        [Test, CustomAutoData]
+        public void AddExecutionLogging_checks_for_nulls(GuardClauseAssertion assertion)
+        {
+            assertion.Verify(typeof(ServiceHostConfiguratorExtensions).GetMethod(nameof(ServiceHostConfiguratorExtensions.AddExecutionLogging)));
         }
     }
 }
