@@ -236,9 +236,9 @@ namespace Tests.ServiceModel
         }
 
         [Test, CustomAutoData]
-        public void AcceptAllIncomingRequests_sets_filterMode_to_Any(WcfServiceHostConfiguration<TestService> configurator, ServiceHost serviceHost)
+        public void AcceptAllConnections_sets_filterMode_to_Any(WcfServiceHostConfiguration<TestService> configurator, ServiceHost serviceHost)
         {
-            configurator.AcceptAllIncomingRequests();
+            configurator.AcceptAllConnections();
 
             configurator.ConfigureServiceHost(serviceHost);
 

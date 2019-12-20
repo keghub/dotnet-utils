@@ -95,7 +95,7 @@ namespace EMG.Utilities.ServiceModel
             });
         }
 
-        public static void AcceptAllIncomingRequests(this IServiceHostConfigurator configurator)
+        public static void AcceptAllConnections(this IServiceHostConfigurator configurator)
         {
             ConfigureService(configurator, svc => svc.AddressFilterMode = AddressFilterMode.Any);
         }
