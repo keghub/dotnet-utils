@@ -236,6 +236,16 @@ namespace Tests.ServiceModel
         }
 
         [Test, CustomAutoData]
+        public void AcceptAllConnections_sets_filterMode_to_Any(WcfServiceHostConfiguration<TestService> configurator, ServiceHost serviceHost)
+        {
+            configurator.AcceptAllConnections();
+
+            configurator.ConfigureServiceHost(serviceHost);
+
+            Assert.That(serviceHost.Description.Behaviors.Find<ServiceBehaviorAttribute>().AddressFilterMode, Is.EqualTo(AddressFilterMode.Any));
+        }
+
+        [Test, CustomAutoData]
         public void AddExecutionLogging_checks_for_nulls(GuardClauseAssertion assertion)
         {
             assertion.Verify(typeof(ServiceHostConfiguratorExtensions).GetMethod(nameof(ServiceHostConfiguratorExtensions.AddExecutionLogging)));
