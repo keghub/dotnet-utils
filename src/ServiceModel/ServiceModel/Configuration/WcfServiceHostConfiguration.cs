@@ -76,6 +76,8 @@ namespace EMG.Utilities.ServiceModel.Configuration
         public IList<Action<ServiceHost>> ServiceHostConfigurations { get; } = new List<Action<ServiceHost>>();
 
         public ILoggerFactory LoggerFactory { get; }
+
+        public ILogger Logger => _logger;
     }
 
 }

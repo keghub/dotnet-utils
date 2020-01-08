@@ -14,6 +14,8 @@ namespace EMG.Utilities.ServiceModel.Configuration
         IList<Action<ServiceHost>> ServiceHostConfigurations { get; }
 
         ILoggerFactory LoggerFactory { get; }
+
+        ILogger Logger { get; }
     }
 
     public interface IServiceHostConfigurator<TService> : IServiceHostConfigurator

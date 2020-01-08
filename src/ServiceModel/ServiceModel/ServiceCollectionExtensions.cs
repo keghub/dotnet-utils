@@ -38,7 +38,7 @@ namespace EMG.Utilities.ServiceModel
 
             services.AddSingleton<WcfServiceHostedServiceConfiguration<TService>>();
 
-            services.AddSingleton<IHostedService>(sp =>
+            services.AddSingleton<IHostedService, WcfServiceHostedService<TService>>(sp =>
             {
                 var options = sp.GetRequiredService<WcfServiceHostedServiceConfiguration<TService>>();
 
@@ -46,12 +46,12 @@ namespace EMG.Utilities.ServiceModel
 
                 var announceService = sp.GetRequiredService<IAnnouncementService>();
 
-                return new WcfServiceHostedService(options, announceService, logger);
+                return new WcfServiceHostedService<TService>(options, announceService, logger);
             });
 
             services.TryAddSingleton<IAnnouncementService, EmptyAnnouncementService>();
 
-            services.Add(new ServiceDescriptor(typeof(TService), typeof(TService), serviceLifetime));
+            services.Add(ServiceDescriptor.Describe(typeof(TService), typeof(TService), serviceLifetime));
 
             return services;
         }
