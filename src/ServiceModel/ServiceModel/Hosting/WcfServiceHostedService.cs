@@ -8,6 +8,11 @@ using Microsoft.Extensions.Logging;
 
 namespace EMG.Utilities.ServiceModel.Hosting
 {
+    public class WcfServiceHostedService<TService> : WcfServiceHostedService where TService : class
+    {
+        public WcfServiceHostedService(WcfServiceHostedServiceConfiguration<TService> configuration, IAnnouncementService announcementService, ILogger<WcfServiceHostedService> logger) : base(configuration, announcementService, logger) { }
+    }
+
     public class WcfServiceHostedService : IHostedService
     {
         private readonly IServiceHostedServiceConfiguration _configuration;
@@ -35,8 +40,14 @@ namespace EMG.Utilities.ServiceModel.Hosting
             _logger.LogDebug($"WCF service started: {_configuration.ServiceType.FullName}");
         }
 
+        private bool _stopping = false;
+
         public async Task StopAsync(CancellationToken cancellationToken)
         {
+            if (_stopping) return;
+
+            _stopping = true;
+
             _disposable.Dispose();
 
             await Task.Factory.FromAsync(_serviceHost.BeginClose, _serviceHost.EndClose, null).ConfigureAwait(false);
