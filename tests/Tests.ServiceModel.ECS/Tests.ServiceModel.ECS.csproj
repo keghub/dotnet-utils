@@ -9,11 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoFixture" Version="4.11.0" />
-    <PackageReference Include="AutoFixture.AutoMoq" Version="4.11.0" />
-    <PackageReference Include="AutoFixture.Idioms" Version="4.11.0" />
-    <PackageReference Include="AutoFixture.NUnit3" Version="4.11.0" />
-    <PackageReference Include="Moq" Version="4.11.0" />
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.12.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
@@ -21,14 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ServiceModel.ECS\ServiceModel.ECS.csproj" />
+    <ProjectReference Include="..\..\src\ServiceModel\ServiceModel.ECS\ServiceModel.ECS.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Discovery">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.ServiceModel.Discovery.dll</HintPath>
-    </Reference>
+    <Reference Include="System.ServiceModel.Discovery" />
   </ItemGroup>
 
 </Project>
