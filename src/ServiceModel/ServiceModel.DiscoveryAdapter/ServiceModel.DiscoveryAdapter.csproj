@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+    <AssemblyName>EMG.Utilities.ServiceModel.DiscoveryAdapter</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>EMG.Utilities.ServiceModel.DiscoveryAdapter</PackageId>
+    <PackageTags>wcf</PackageTags>
+    <Description>Slimmed-down contract for WCF Discovery.</Description>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461'">
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.7.0" />
+  </ItemGroup>
+
+</Project>
