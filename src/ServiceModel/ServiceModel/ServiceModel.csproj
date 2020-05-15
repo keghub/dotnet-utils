@@ -22,4 +22,8 @@
     <PackageReference Include="System.Reactive.Linq" Version="3.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ServiceModel.Extensions\ServiceModel.Extensions.csproj" />
+  </ItemGroup>
+
 </Project>

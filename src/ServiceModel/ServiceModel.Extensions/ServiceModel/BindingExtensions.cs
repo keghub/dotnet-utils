@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 
 namespace EMG.Utilities.ServiceModel
 {
@@ -44,6 +45,22 @@ namespace EMG.Utilities.ServiceModel
             return binding;
         }
 
+        public static Binding WithNoSecurity(this Binding binding)
+        {
+            return binding switch
+            {
+                BasicHttpBinding basic => basic.WithNoSecurity() as Binding,
+                NetTcpBinding netTcp => netTcp.WithNoSecurity() as Binding,
+                WSHttpBinding wsHttp => wsHttp.WithNoSecurity() as Binding,
+#if !NETSTANDARD
+                NetNamedPipeBinding netNamed => netNamed.WithNoSecurity() as Binding,
+#endif
+                _ => throw new NotSupportedException()
+            };
+        }
+
+#if !NETSTANDARD
+
         public static NetNamedPipeBinding UseSecureChannel(this NetNamedPipeBinding binding, Action<NamedPipeTransportSecurity> configure = null)
         {
             binding.Security.Mode = NetNamedPipeSecurityMode.Transport;
@@ -56,5 +73,6 @@ namespace EMG.Utilities.ServiceModel
             binding.Security.Mode = NetNamedPipeSecurityMode.None;
             return binding;
         }
+#endif
     }
 }
