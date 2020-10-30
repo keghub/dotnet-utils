@@ -60,8 +60,16 @@ namespace EMG.Utilities.ServiceModel.Discovery
 
                     if (metadata != null)
                     {
-                        client.AnnounceOnline(metadata);
-                        _logger.LogTrace($"[{endpoint.Contract.ContractType}] Announced {endpoint.Address.Uri} to {_options.RegistryUri}");
+                        try
+                        {
+                            client.AnnounceOnline(metadata);
+                            _logger.LogTrace(
+                                $"[{endpoint.Contract.ContractType}] Announced {endpoint.Address.Uri} to {_options.RegistryUri}");
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning(ex, $"Failed to announce [{endpoint.Contract.ContractType}] service to {_options.RegistryUri}: {ex}");
+                        }
                     }
                 }
             });
@@ -79,10 +87,16 @@ namespace EMG.Utilities.ServiceModel.Discovery
 
                         if (metadata != null)
                         {
-                            client.AnnounceOffline(metadata);
-                            _logger.LogTrace($"Unannounced {endpoint.Address.Uri} to {_options.RegistryUri}");
+                            try
+                            {
+                                client.AnnounceOffline(metadata);
+                                _logger.LogTrace($"Unannounced {endpoint.Address.Uri} to {_options.RegistryUri}");
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogWarning(ex, $"Failed to announce [{endpoint.Contract.ContractType}] service to {_options.RegistryUri}: {ex}");
+                            }
                         }
-
                     }
                 }
             }
