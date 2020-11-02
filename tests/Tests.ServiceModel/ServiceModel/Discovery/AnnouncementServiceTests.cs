@@ -74,9 +74,11 @@ namespace Tests.ServiceModel.Discovery
 
             Mock.Get(clientFactory).Setup(i => i.Create(It.IsAny<Uri>(), It.IsAny<Binding>())).Returns(clientWrapper);
 
-            Assert.DoesNotThrow(() => sut.AnnounceEndpoints(new[] {testEndpoint}));
-
-            scheduler.AdvanceBy(options.Interval.Ticks);
+            Assert.DoesNotThrow(() =>
+            {
+                sut.AnnounceEndpoints(new[] {testEndpoint});
+                scheduler.AdvanceBy(options.Interval.Ticks);
+            });
         }
 
         [Test, CustomAutoData]
