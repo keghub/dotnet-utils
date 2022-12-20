@@ -70,10 +70,11 @@ namespace EMG.Utilities.ServiceModel
                 options.Binding = binding;
             });
 
+            services.AddSingleton<IAnnouncementClientWrapperFactory, DefaultAnnouncementClientWrapperFactory>();
+
             services.AddSingleton<IAnnouncementService, AnnouncementService>();
 
             return services;
         }
-
     }
 }

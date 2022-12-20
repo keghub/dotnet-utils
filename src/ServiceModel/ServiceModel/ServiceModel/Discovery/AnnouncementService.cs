@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Discovery;
@@ -29,11 +29,15 @@ namespace EMG.Utilities.ServiceModel.Discovery
     public class AnnouncementService : IAnnouncementService
     {
         private readonly ILogger<AnnouncementService> _logger;
+        private readonly IAnnouncementClientWrapperFactory _clientFactory;
+        private readonly IScheduler _scheduler;
         private readonly AnnouncementServiceOptions _options;
 
-        public AnnouncementService(IOptions<AnnouncementServiceOptions> options, ILogger<AnnouncementService> logger)
+        public AnnouncementService(IOptions<AnnouncementServiceOptions> options, ILogger<AnnouncementService> logger, IAnnouncementClientWrapperFactory clientFactory, IScheduler scheduler = null)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _clientFactory = clientFactory ?? throw new ArgumentNullException(nameof(clientFactory));
+            _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
@@ -46,7 +50,7 @@ namespace EMG.Utilities.ServiceModel.Discovery
 
             var endpointsToAnnounce = endpoints.Where(e => e.HasBehavior<AnnounceableBehavior>()).ToArray();
 
-            var observable = Observable.Interval(_options.Interval).Finally(() => UnannounceService(endpointsToAnnounce));
+            var observable = Observable.Interval(_options.Interval, _scheduler).Finally(() => UnannounceService(endpointsToAnnounce));
 
             var sequence = from item in observable
                            from endpoint in endpointsToAnnounce
@@ -54,14 +58,23 @@ namespace EMG.Utilities.ServiceModel.Discovery
 
             return sequence.Subscribe(endpoint =>
             {
-                using (var client = CreateClient())
+                using (var client = _clientFactory.Create(_options.RegistryUri, _options.Binding))
                 {
                     var metadata = _options.EndpointDiscoveryMetadata(endpoint);
 
                     if (metadata != null)
                     {
-                        client.AnnounceOnline(metadata);
-                        _logger.LogTrace($"[{endpoint.Contract.ContractType}] Announced {endpoint.Address.Uri} to {_options.RegistryUri}");
+                        try
+                        {
+                            client.AnnounceOnline(metadata);
+                            _logger.LogTrace(
+                                $"[{endpoint.Contract.ContractType}] Announced {endpoint.Address.Uri} to {_options.RegistryUri}");
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning(ex,
+                                $"Failed to announce [{endpoint.Contract.ContractType}] service to {_options.RegistryUri}: {ex}");
+                        }
                     }
                 }
             });
@@ -71,7 +84,7 @@ namespace EMG.Utilities.ServiceModel.Discovery
         {
             if (endpoints.Any())
             {
-                using (var client = CreateClient())
+                using (var client = _clientFactory.Create(_options.RegistryUri, _options.Binding))
                 {
                     foreach (var endpoint in endpoints)
                     {
@@ -79,20 +92,19 @@ namespace EMG.Utilities.ServiceModel.Discovery
 
                         if (metadata != null)
                         {
-                            client.AnnounceOffline(metadata);
-                            _logger.LogTrace($"Unannounced {endpoint.Address.Uri} to {_options.RegistryUri}");
+                            try
+                            {
+                                client.AnnounceOffline(metadata);
+                                _logger.LogTrace($"Unannounced {endpoint.Address.Uri} to {_options.RegistryUri}");
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogWarning(ex, $"Failed to announce [{endpoint.Contract.ContractType}] service to {_options.RegistryUri}: {ex}");
+                            }
                         }
-
                     }
                 }
             }
-        }
-
-        private AnnouncementClient CreateClient()
-        {
-            var endpointAddress = new EndpointAddress(_options.RegistryUri);
-            var endpoint = new AnnouncementEndpoint(_options.Binding, endpointAddress);
-            return new AnnouncementClient(endpoint);
         }
     }
 }
