@@ -1,5 +1,4 @@
-﻿using AutoFixture.Idioms;
-using AutoFixture.NUnit3;
+﻿using AutoFixture.NUnit3;
 using EMG.Utilities.ServiceModel.Discovery;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -8,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -21,9 +21,27 @@ namespace Tests.ServiceModel.Discovery
     public class AnnouncementServiceTests
     {
         [Test, CustomAutoData]
-        public void Constructor_is_guarded(GuardClauseAssertion assertion)
+        public void Constructor_throws_exception_when_logger_is_null(IOptions<AnnouncementServiceOptions> options, IAnnouncementClientWrapperFactory clientFactory, IScheduler scheduler)
         {
-            assertion.Verify(typeof(AnnouncementService).GetConstructors());
+            Assert.That(() => new AnnouncementService(options, null, clientFactory, scheduler), Throws.ArgumentNullException);
+        }
+
+        [Test, CustomAutoData]
+        public void Constructor_throws_exception_when_clientFactory_is_null(IOptions<AnnouncementServiceOptions> options, ILogger<AnnouncementService> logger, IScheduler scheduler)
+        {
+            Assert.That(() => new AnnouncementService(options, logger, null, scheduler), Throws.ArgumentNullException);
+        }
+
+        [Test, CustomAutoData]
+        public void Constructor_throws_exception_when_options_is_null(ILogger<AnnouncementService> logger, IAnnouncementClientWrapperFactory clientFactory, IScheduler scheduler)
+        {
+            Assert.That(() => new AnnouncementService(null, logger, clientFactory, scheduler), Throws.ArgumentNullException);
+        }
+
+        [Test, CustomAutoData]
+        public void Constructor_does_not_throw_exception_when_scheduler_is_null(IOptions<AnnouncementServiceOptions> options, ILogger<AnnouncementService> logger, IAnnouncementClientWrapperFactory clientFactory)
+        {
+            Assert.That(() => new AnnouncementService(options, logger, clientFactory, null), Throws.Nothing);
         }
 
         [Test, CustomAutoData]
@@ -104,7 +122,6 @@ namespace Tests.ServiceModel.Discovery
                 var subscription = sut.AnnounceEndpoints(new[] {testEndpoint});
                 subscription.Dispose();
             });
-
         }
     }
 }
