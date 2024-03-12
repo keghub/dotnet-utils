@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.2;net47</TargetFrameworks>
+    <TargetFrameworks>net47;net8.0</TargetFrameworks>
     <RootNamespace>Tests</RootNamespace>
     <IsPackable>false</IsPackable>
     <AssemblyName>Tests.NybusBridge</AssemblyName>
