@@ -1,4 +1,5 @@
 using System;
+using System.ServiceModel;
 using System.ServiceModel.Discovery;
 
 namespace EMG.Utilities.ServiceModel.Discovery
@@ -24,7 +25,16 @@ namespace EMG.Utilities.ServiceModel.Discovery
 
         public void Dispose()
         {
-            ((IDisposable)_client).Dispose();
+            var communicationObject = _client as ICommunicationObject;
+
+            if (communicationObject.State != CommunicationState.Faulted)
+            {
+                ((IDisposable)_client).Dispose();
+            }
+            else 
+            {
+                communicationObject.Abort();
+            }
         }
     }
 }
