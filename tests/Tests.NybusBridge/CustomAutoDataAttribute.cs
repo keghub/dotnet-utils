@@ -16,7 +16,7 @@ namespace Tests
 
             fixture.Customize(new AutoMoqCustomization
             {
-                ConfigureMembers = true,
+                ConfigureMembers = false,
                 GenerateDelegates = true
             });
 
